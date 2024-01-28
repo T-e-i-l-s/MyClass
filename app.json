@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Мой класс",
+    "slug": "MyClass",
+    "version": "1.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#14110f"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#14110f"
+      },
+      "package": "com.karimmust123.MyClass"
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3a7f0949-1685-4093-8915-0bbf2f353226"
+      }
+    }
+  }
+}
