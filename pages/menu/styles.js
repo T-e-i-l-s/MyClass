@@ -18,27 +18,14 @@ export default (theme) => StyleSheet.create({
 
   navButton: {
     width: '33.3333333%',
-    fontSize: 17,
-    fontFamily: 'regular',
-    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 10
   },
 
-  navIndicatorRow: {
-    flexDirection: 'row',
-    width: '100%',
-  },
-  
-  navIndicator: {
-    alignItems: 'center',
-    width: '33.3333333%',
-    paddingHorizontal:'5%',
-    height: 2,
-    gradientColors: [
-      theme.background, 
-      theme.additional, 
-      theme.background
-    ]
+  navIcon: {
+    width: 35,
+    height: 35,
   },
 
   mainArea: { 

@@ -1,14 +1,12 @@
 import { StatusBar } from 'expo-status-bar'
-import { Text, View, Animated, Platform, Dimensions } from 'react-native'
+import { Text, View, Animated, Platform, Dimensions, TouchableHighlight, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import styleSheet from './styles'
 import React, { useRef, useState } from 'react'
-import { LinearGradient } from 'expo-linear-gradient'
 import HomeworkScreen from './homework/page'
 import ScheduleScreen from './schedule/page'
 import HolidaysScreen from './holidays/page'
-import GestureRecognizer from 'react-native-swipe-gestures';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import GestureRecognizer from 'react-native-swipe-gestures'
 
 export default function App({navigation, route}) {
 
@@ -19,88 +17,21 @@ export default function App({navigation, route}) {
 
   const [screen, setScreen] = useState('homework')
 
-  const [leftTitleColor, setLeftTitleColor] = useState(theme.hiddenText)
-  const [centerTitleColor, setCenterTitleColor] = useState(theme.text)
-  const [rightTitleColor, setRightTitleColor] = useState(theme.hiddenText)
-
   const [navBlockHeight,setBlockHeight] = useState(0)
 
   const pageOpacity = useRef(
     new Animated.Value(0)
   ).current
-  const leftNavIndicatorOpacity = useRef(
-    new Animated.Value(0)
-  ).current
-  const centerNavIndicatorOpacity = useRef(
-    new Animated.Value(1)
-  ).current
-  const rightNavIndicatorOpacity = useRef(
-    new Animated.Value(0)
-  ).current
 
   const openHolidays = () => {
-    Animated.timing(leftNavIndicatorOpacity, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(rightNavIndicatorOpacity, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(centerNavIndicatorOpacity, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    setLeftTitleColor(theme.text)
-    setRightTitleColor(theme.hiddenText)
-    setCenterTitleColor(theme.hiddenText)
     setScreen('holidays')
   }
 
   const openSchedule = () => {
-    Animated.timing(leftNavIndicatorOpacity, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(rightNavIndicatorOpacity, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(centerNavIndicatorOpacity, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    setLeftTitleColor(theme.hiddenText)
-    setRightTitleColor(theme.text)
-    setCenterTitleColor(theme.hiddenText)
     setScreen('schedule')
   }
 
   const openHomework = () => {
-    Animated.timing(leftNavIndicatorOpacity, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(rightNavIndicatorOpacity, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(centerNavIndicatorOpacity, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true
-    }).start()
-    setLeftTitleColor(theme.hiddenText)
-    setRightTitleColor(theme.hiddenText)
-    setCenterTitleColor(theme.text)
     setScreen('homework')
   }
 
@@ -152,70 +83,6 @@ export default function App({navigation, route}) {
     
           <Animated.View style={{opacity: pageOpacity, width: '100%', height: '100%'}}>
     
-            <View style={styles.navBar} onLayout={(event) => setBlockHeight(event.nativeEvent.layout.height)}>
-              <Text 
-              // onLongPress={() => {navigation.navigate('PasswordScreen', param)}} 
-              onPress={openHolidays} 
-              style={[styles.navButton,{color:leftTitleColor}]}>
-                Праздники
-              </Text>
-              <Text 
-              onLongPress={() => {navigation.navigate('PasswordScreen', param)}} 
-              onPress={openHomework} 
-              style={[styles.navButton,{color:centerTitleColor}]}>
-                Задания
-              </Text>
-              <Text 
-              onLongPress={() => AsyncStorage.clear()} 
-              onPress={openSchedule} 
-              style={[styles.navButton,{color:rightTitleColor}]}>
-                Расписание
-              </Text>
-            </View>
-    
-            <View style={styles.navIndicatorRow}>
-             
-              <Animated.View style={
-                [styles.navIndicator, 
-                {opacity: leftNavIndicatorOpacity}]
-              }>
-                <LinearGradient 
-                start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}}
-                colors={styles.navIndicator.gradientColors} 
-                style={{
-                  height: '100%',
-                  width: '100%'
-                }}/>
-              </Animated.View>
-    
-              <Animated.View style={
-                [styles.navIndicator, 
-                {opacity: centerNavIndicatorOpacity}]
-              }>
-                <LinearGradient 
-                start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}}
-                colors={styles.navIndicator.gradientColors} 
-                style={{
-                  height: '100%',
-                  width: '100%'
-                }}/>
-              </Animated.View>
-    
-              <Animated.View style={
-                [styles.navIndicator, 
-                {opacity: rightNavIndicatorOpacity}]
-              }>
-                <LinearGradient 
-                start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}}
-                colors={styles.navIndicator.gradientColors} 
-                style={{
-                  height: '100%',
-                  width: '100%'
-                }}/>
-              </Animated.View>
-    
-            </View>
-    
             <View 
             style={[
               styles.mainArea,
@@ -234,6 +101,44 @@ export default function App({navigation, route}) {
                   )
                 }
     
+            </View>
+
+            <View style={styles.navBar} onLayout={(event) => setBlockHeight(event.nativeEvent.layout.height)}>
+
+              <TouchableHighlight 
+              onLongPress={() => {navigation.navigate('PasswordScreen', param)}} 
+              underlayColor={'rgba(255, 0, 255,0)'}
+              onPress={openHolidays}
+              style={styles.navButton}>
+                <Image style={styles.navIcon} source={
+                  screen == 'holidays' ? 
+                  require('../../assets/icons/navigation/holidays1.png') : 
+                  require('../../assets/icons/navigation/holidays0.png')
+                }/>
+              </TouchableHighlight>
+
+              <TouchableHighlight 
+              underlayColor={'rgba(255, 0, 255,0)'}
+              onPress={openHomework}
+              style={styles.navButton}>
+                <Image style={styles.navIcon} source={
+                  screen == 'homework' ? 
+                  require('../../assets/icons/navigation/homework1.png') : 
+                  require('../../assets/icons/navigation/homework0.png')
+                }/>
+              </TouchableHighlight>
+
+              <TouchableHighlight 
+              underlayColor={'rgba(255, 0, 255,0)'}
+              onPress={openSchedule}
+              style={styles.navButton}>
+                <Image style={styles.navIcon} source={
+                  screen == 'schedule' ? 
+                  require('../../assets/icons/navigation/schedule1.png') : 
+                  require('../../assets/icons/navigation/schedule0.png')
+                }/>
+              </TouchableHighlight>
+
             </View>
             
           </Animated.View>
