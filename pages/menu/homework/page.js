@@ -27,7 +27,7 @@ export default function App(route) {
     const homeworkDate = item.split('.')
     if ( dateNow[2] > parseInt(homeworkDate[2]) ||
       ( dateNow[2] == parseInt(homeworkDate[2]) && dateNow[1] > parseInt(homeworkDate[1])) ||
-      ( dateNow[2] == parseInt(homeworkDate[2]) && dateNow[1] == parseInt(homeworkDate[1]) && dateNow[0] > parseInt(homeworkDate[0]))) {
+      ( dateNow[2] == parseInt(homeworkDate[2]) && dateNow[1] == parseInt(homeworkDate[1]) && dateNow[0] >= parseInt(homeworkDate[0]))) {
       return theme.hiddenText
     }
     return theme.additional
@@ -75,40 +75,49 @@ export default function App(route) {
       scrollEnabled={true}
       showsVerticalScrollIndicator={false}
       renderItem={({item,index}) => (
-        <View style={[styles.homeworkBlock, {
-          marginTop: index == 0 && devMode ? 0 : 10,
-          marginBottom: index == homework.length-1 ? 10 : 0, 
-          borderLeftWidth: 4, 
-          borderLeftColor: checkDate(item.date)
-        }]}>
+        
+        <View>
+
           {
-            devMode ? (
-              <View style={{flexDirection: 'row'}}>
-
-                <TouchableHighlight
-                underlayColor={'rgba(255, 0, 255,0)'} 
-                style={styles.editButton}
-                onPress={() => navigation.navigate('CreateHomework', {
-                  data: route.data,
-                  edit: true,
-                  source: {id: index, subject: item.subject, homework: item.homework, date: item.date}
-                })}>
-                  <Image style={styles.editIcon} source={require('../../../assets/icons/edit.png')}/>
-                </TouchableHighlight>
-
-                <TouchableHighlight 
-                underlayColor={'rgba(255, 0, 255,0)'} 
-                style={styles.editButton}
-                onPress={() => deleteData(index)}>
-                  <Image style={styles.editIcon} source={require('../../../assets/icons/delete.png')}/>
-                </TouchableHighlight>
-
-              </View>
+            index == 0 || item.date != homework[index-1].date? (
+              <Text style={[styles.date,{marginTop: index == 0 && devMode ? 0 : 10}]}>На {item.date}</Text>
             ):null
           }
-          <Text style={styles.subject}>{item.subject}</Text>
-          <Text style={styles.task}>{item.homework}</Text>
-          <Text style={styles.date}>На {item.date}</Text>
+
+          <View style={[styles.homeworkBlock, {
+            marginBottom: index == homework.length-1 ? 10 : 0, 
+            borderLeftWidth: 4, 
+            borderLeftColor: checkDate(item.date)
+          }]}>
+            {
+              devMode ? (
+                <View style={{flexDirection: 'row'}}>
+
+                  <TouchableHighlight
+                  underlayColor={'rgba(255, 0, 255,0)'} 
+                  style={styles.editButton}
+                  onPress={() => navigation.navigate('CreateHomework', {
+                    data: route.data,
+                    edit: true,
+                    source: {id: index, subject: item.subject, homework: item.homework, date: item.date}
+                  })}>
+                    <Image style={styles.editIcon} source={require('../../../assets/icons/edit.png')}/>
+                  </TouchableHighlight>
+
+                  <TouchableHighlight 
+                  underlayColor={'rgba(255, 0, 255,0)'} 
+                  style={styles.editButton}
+                  onPress={() => deleteData(index)}>
+                    <Image style={styles.editIcon} source={require('../../../assets/icons/delete.png')}/>
+                  </TouchableHighlight>
+
+                </View>
+              ):null
+            }
+            <Text style={styles.subject}>{item.subject}</Text>
+            <Text style={styles.task}>{item.homework}</Text>
+            {/* <Text style={styles.date}>На {item.date}</Text> */}
+          </View>  
         </View>  
       )}/>
 

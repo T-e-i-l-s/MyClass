@@ -19,6 +19,29 @@ export default function App({navigation, route}) {
   const [homework, setHomework] = useState(param.source.homework)
   const [date, setDate] = useState(param.source.date)
 
+  const compareDates = (hw1, hw2) => {
+    const date1 = hw1.date
+    const date2 = hw2.date
+    const homeworkDate1 = date1.split('.')
+    const homeworkDate2 = date2.split('.')
+    const unixTime1 = new Date(
+      parseInt(homeworkDate1[2]), 
+      parseInt(homeworkDate1[1] - 1), 
+      parseInt(homeworkDate1[0]))
+    const unixTime2 = new Date(
+      parseInt(homeworkDate2[2]), 
+      parseInt(homeworkDate2[1] - 1), 
+      parseInt(homeworkDate2[0]))
+
+    if (unixTime1 > unixTime2 || unixTime1 == 'Invalid Date' || unixTime2 == 'Date') {
+      return -1
+    } else if (unixTime1 == unixTime2) {
+      return 0
+    } else {
+      return 1
+    }
+  }
+
   const saveData = () => {
     let tasks = param.data.data.homework.tasks
     if ( param.edit ) {
@@ -26,6 +49,7 @@ export default function App({navigation, route}) {
     } else {
       tasks.unshift({subject: subject, homework: homework, date: date})
     }
+    tasks.sort(compareDates)
     let result = param.data
     result.data.homework.tasks = tasks
     push(db, 'MyClass', 'Homework', 'tasks', tasks)

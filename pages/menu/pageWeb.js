@@ -6,7 +6,8 @@ import React, { useRef, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import HomeworkScreen from './homework/page'
 import ScheduleScreen from './schedule/page'
-import { Swipeable } from 'react-native-gesture-handler'
+import HolidaysScreen from './holidays/page'
+// import { Swipeable } from 'react-native-gesture-handler'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function App({navigation, route}) {
@@ -18,7 +19,8 @@ export default function App({navigation, route}) {
 
   const [screen, setScreen] = useState('homework')
 
-  const [leftTitleColor, setLeftTitleColor] = useState(theme.text)
+  const [leftTitleColor, setLeftTitleColor] = useState(theme.hiddenText)
+  const [centerTitleColor, setCenterTitleColor] = useState(theme.text)
   const [rightTitleColor, setRightTitleColor] = useState(theme.hiddenText)
 
   const [navBlockHeight,setBlockHeight] = useState(0)
@@ -28,11 +30,36 @@ export default function App({navigation, route}) {
     new Animated.Value(0)
   ).current
   const leftNavIndicatorOpacity = useRef(
+    new Animated.Value(0)
+  ).current
+  const centerNavIndicatorOpacity = useRef(
     new Animated.Value(1)
   ).current
   const rightNavIndicatorOpacity = useRef(
     new Animated.Value(0)
   ).current
+
+  const openHolidays = () => {
+    Animated.timing(leftNavIndicatorOpacity, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(rightNavIndicatorOpacity, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(centerNavIndicatorOpacity, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true
+    }).start()
+    setLeftTitleColor(theme.text)
+    setRightTitleColor(theme.hiddenText)
+    setCenterTitleColor(theme.hiddenText)
+    setScreen('holidays')
+  }
 
   const openSchedule = () => {
     Animated.timing(leftNavIndicatorOpacity, {
@@ -45,14 +72,20 @@ export default function App({navigation, route}) {
       duration: 300,
       useNativeDriver: true
     }).start()
+    Animated.timing(centerNavIndicatorOpacity, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true
+    }).start()
     setLeftTitleColor(theme.hiddenText)
     setRightTitleColor(theme.text)
+    setCenterTitleColor(theme.hiddenText)
     setScreen('schedule')
   }
 
   const openHomework = () => {
     Animated.timing(leftNavIndicatorOpacity, {
-      toValue: 1,
+      toValue: 0,
       duration: 300,
       useNativeDriver: true
     }).start()
@@ -61,9 +94,31 @@ export default function App({navigation, route}) {
       duration: 300,
       useNativeDriver: true
     }).start()
-    setLeftTitleColor(theme.text)
+    Animated.timing(centerNavIndicatorOpacity, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true
+    }).start()
+    setLeftTitleColor(theme.hiddenText)
     setRightTitleColor(theme.hiddenText)
+    setCenterTitleColor(theme.text)
     setScreen('homework')
+  }
+
+  const swipeLeft = () => {
+    if ( screen == 'schedule' ) {
+      openHomework()
+    } else if ( screen == 'homework' ) {
+      openHolidays()
+    }
+  }
+
+  const swipeRight = () => {
+    if ( screen == 'holidays' ) {
+      openHomework()
+    } else if ( screen == 'homework' ) {
+      openSchedule()
+    }
   }
   
   React.useEffect(() => {
@@ -83,37 +138,47 @@ export default function App({navigation, route}) {
       
       {/* <GestureHandlerRootView style={{width: '100%'}}> */}
      
-        <Swipeable 
+        {/* <Swipeable 
         containerStyle={{width: '100%', paddingBottom: Math.max(0, Dimensions.get('window').height - webPageHeight)}}
         dragOffsetFromLeftEdge={100}
         dragOffsetFromRightEdge={100}
         onSwipeableWillClose={(dir) => {
           if ( dir == 'left' ) {
-            openHomework()
+            swipeLeft()
           } else {
-            openSchedule()
+            swipeRight()
           }
-        }}>
+        }}> */}
   
-          <SafeAreaView 
-          onLayout={(event) => setWebPageHeight(event.nativeEvent.layout.height)} 
-          style={{width: '100%', backgroundColor: theme.background}}>
-  
+          <SafeAreaView style={{width: '100%', backgroundColor: theme.background}}>
+    
             <StatusBar style='auto'/>
-  
+
             <Animated.View style={{opacity: pageOpacity, width: '100%', height: '100%'}}>
-  
+
               <View style={styles.navBar} onLayout={(event) => setBlockHeight(event.nativeEvent.layout.height)}>
-                <Text onLongPress={() => {navigation.navigate('PasswordScreen', param)}} onPress={openHomework} style={[styles.navButton,{color:leftTitleColor}]}>
+                <Text 
+                // onLongPress={() => {navigation.navigate('PasswordScreen', param)}} 
+                onPress={openHolidays} 
+                style={[styles.navButton,{color:leftTitleColor}]}>
+                  Праздники
+                </Text>
+                <Text 
+                onLongPress={() => {navigation.navigate('PasswordScreen', param)}} 
+                onPress={openHomework} 
+                style={[styles.navButton,{color:centerTitleColor}]}>
                   Задания
                 </Text>
-                <Text onLongPress={() => AsyncStorage.clear()} onPress={openSchedule} style={[styles.navButton,{color:rightTitleColor}]}>
+                <Text 
+                onLongPress={() => AsyncStorage.clear()} 
+                onPress={openSchedule} 
+                style={[styles.navButton,{color:rightTitleColor}]}>
                   Расписание
                 </Text>
               </View>
-  
+
               <View style={styles.navIndicatorRow}>
-  
+              
                 <Animated.View style={
                   [styles.navIndicator, 
                   {opacity: leftNavIndicatorOpacity}]
@@ -126,7 +191,20 @@ export default function App({navigation, route}) {
                     width: '100%'
                   }}/>
                 </Animated.View>
-  
+
+                <Animated.View style={
+                  [styles.navIndicator, 
+                  {opacity: centerNavIndicatorOpacity}]
+                }>
+                  <LinearGradient 
+                  start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}}
+                  colors={styles.navIndicator.gradientColors} 
+                  style={{
+                    height: '100%',
+                    width: '100%'
+                  }}/>
+                </Animated.View>
+
                 <Animated.View style={
                   [styles.navIndicator, 
                   {opacity: rightNavIndicatorOpacity}]
@@ -139,9 +217,9 @@ export default function App({navigation, route}) {
                     width: '100%'
                   }}/>
                 </Animated.View>
-  
+
               </View>
-  
+
               <View 
               style={[
                 styles.mainArea,
@@ -149,22 +227,24 @@ export default function App({navigation, route}) {
                   height: Platform.OS == 'android' ? Dimensions.get('window').height - navBlockHeight - 2 : 'auto'
                 }
               ]}>
-  
+
                   {
                     screen == 'homework' ? (
                       <HomeworkScreen data={param}/>
-                    ):(
+                    ) : screen == 'holidays' ? (
+                      <HolidaysScreen data={param}/>
+                    ) : (
                       <ScheduleScreen data={param}/>
                     )
                   }
-  
+
               </View>
               
             </Animated.View>
-  
+
           </SafeAreaView>
 
-        </Swipeable>  
+        {/* </Swipeable>   */}
   
       {/* </GestureHandlerRootView> */}
 

@@ -11,13 +11,14 @@ export default (theme) => StyleSheet.create({
   },
 
   navBar: {
+    justifyContent: 'center',
     flexDirection: 'row',
     width: '100%',
   },
 
   navButton: {
-    width: '50%',
-    fontSize: 18,
+    width: '33.3333333%',
+    fontSize: 17,
     fontFamily: 'regular',
     textAlign: 'center',
     padding: 10
@@ -30,7 +31,7 @@ export default (theme) => StyleSheet.create({
   
   navIndicator: {
     alignItems: 'center',
-    width: '50%',
+    width: '33.3333333%',
     paddingHorizontal:'5%',
     height: 2,
     gradientColors: [

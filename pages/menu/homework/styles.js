@@ -58,7 +58,7 @@ export default (theme) => StyleSheet.create({
     fontSize: 17,
     fontFamily: 'regular',
     color: theme.hiddenText,
-    marginTop: 4
+    marginTop: 10
   },
   
   emptyTitle: {

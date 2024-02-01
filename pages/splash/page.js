@@ -18,16 +18,42 @@ export default function App({navigation}) {
   const [styles, setStyles] = useState(styleSheet(theme))
   const [isLoaded, setIsLoaded] = useState(false)
 
+  const compareDates = (hw1, hw2) => {
+    const date1 = hw1.date
+    const date2 = hw2.date
+    const homeworkDate1 = date1.split('.')
+    const homeworkDate2 = date2.split('.')
+    const unixTime1 = new Date(
+      parseInt(homeworkDate1[2]), 
+      parseInt(homeworkDate1[1] - 1), 
+      parseInt(homeworkDate1[0]))
+    const unixTime2 = new Date(
+      parseInt(homeworkDate2[2]), 
+      parseInt(homeworkDate2[1] - 1), 
+      parseInt(homeworkDate2[0]))
+
+    if (unixTime1 > unixTime2 || unixTime1 == 'Invalid Date' || unixTime2 == 'Date') {
+      return -1
+    } else if (unixTime1 == unixTime2) {
+      return 0
+    } else {
+      return 1
+    }
+  }
+
   const getData = async () => {
     let data = {}
     const homework = await get(db, "MyClass", "Homework")
     const schedule = await get(db, "MyClass", "Timetable")
     const onboarding = await get(db, "MyClass", "Onboarding")
+    const holidays = await get(db, "MyClass", "Holidays")
     const devMode = await get(db, "MyClass", "DevMode")
     data["homework"] = homework
+    data["homework"].tasks = (data["homework"].tasks).sort(compareDates)
     data["schedule"] = schedule
     data["onboarding"] = onboarding
     const onbooardingStatus = await AsyncStorage.getItem(onboarding.id)
+    data["holidays"] = holidays
     data["devMode"] = {code: devMode.pinCode, active: false}
     if ( devMode.currentVersion != appConfig.expo.version) {
       data["onboarding"] = {
