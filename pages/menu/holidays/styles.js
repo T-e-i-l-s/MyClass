@@ -19,11 +19,16 @@ export default (theme) => StyleSheet.create({
 
   dateBlock: {
     width: '30%',
-    height: '100%',
-    borderRightWidth: 2,
-    borderRightColor: theme.border,
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 10,
   },
+
+  separator: {
+    width: 2,
+    height: '100%',
+    backgroundColor: theme.border
+  },  
 
   day: {
     width: '100%',
@@ -43,10 +48,10 @@ export default (theme) => StyleSheet.create({
 
   title: {
     width: '70%',
-    fontSize: 21,
+    fontSize: 17,
     textAlign: 'center',
     fontFamily: 'semi',
     color: theme.text,
-    padding: 10,
+    padding: 20,
   },
 });

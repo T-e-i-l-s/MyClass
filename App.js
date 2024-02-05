@@ -1,7 +1,10 @@
 import Page from './navigate'
-import { View, Text } from 'react-native'
+import { View, StatusBar } from 'react-native'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
+
+import { vexo } from 'vexo-analytics'
+vexo('04e43c32-9288-4a2a-af12-27eef87ac681')
 
 SplashScreen.preventAutoHideAsync()
 
@@ -18,11 +21,12 @@ export default function App() {
     flag = true
     setTimeout(() => {
       SplashScreen.hideAsync()
-    },700)
+    },600)
   }
 
   return (
     <View style={{flex:1, width:'100%', height: '100%', backgroundColor: '#14110f'}}>
+      <StatusBar style='auto'/>
       {
         fontsLoaded ? (
           <Page/>

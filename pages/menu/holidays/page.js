@@ -52,6 +52,7 @@ export default function App(route) {
               <Text style={styles.day}>{item.day}</Text>
               <Text style={styles.month}>{months[item.month-1]}</Text>
             </View>
+            <View style={styles.separator}/>
             <Text style={styles.title}>{item.title}</Text>
           </View>
         )}/>

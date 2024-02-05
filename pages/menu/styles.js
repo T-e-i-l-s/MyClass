@@ -20,12 +20,12 @@ export default (theme) => StyleSheet.create({
     width: '33.3333333%',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10
+    padding: 15
   },
 
   navIcon: {
-    width: 35,
-    height: 35,
+    width: 30,
+    height: 30,
   },
 
   mainArea: { 

@@ -10,7 +10,8 @@ import { initializeApp } from "firebase/app";
 import firebaseConfig from '../../keys/firebase.json'
 import get from '../../firebase/get'
 
-const db = initializeApp(firebaseConfig);
+const db = initializeApp(firebaseConfig)
+
 
 export default function App({navigation}) {
   
@@ -41,6 +42,36 @@ export default function App({navigation}) {
     }
   }
 
+  const compareHolidayDates = (holiday1, holiday2) => {
+    
+    const timeNow = new Date()
+
+    const holiday1Dates = [parseInt(holiday1.day), parseInt(holiday1.month)]
+    const holiday2Dates = [parseInt(holiday2.day), parseInt(holiday2.month)]
+
+    let date1 = new Date(timeNow.getFullYear(), holiday1Dates[1]-1, holiday1Dates[0])
+    let date2 = new Date(timeNow.getFullYear(), holiday2Dates[1]-1, holiday2Dates[0])
+
+    if (date1 < timeNow) {
+      date1 = new Date(timeNow.getFullYear()+1, holiday1Dates[1]-1, holiday1Dates[0])
+    }
+    if (date2 < timeNow) {
+      date2 = new Date(timeNow.getFullYear()+1, holiday2Dates[1]-1, holiday2Dates[0])
+    }
+
+    let dif1 = date1-timeNow
+    let dif2 = date2-timeNow
+
+
+    if (dif1 > dif2 || dif1 == 'Invalid Date' || dif2 == 'Date') {
+      return 1
+    } else if (dif1 == dif2) {
+      return 0
+    } else {
+      return -1
+    }
+  }
+
   const getData = async () => {
     let data = {}
     const homework = await get(db, "MyClass", "Homework")
@@ -54,6 +85,7 @@ export default function App({navigation}) {
     data["onboarding"] = onboarding
     const onbooardingStatus = await AsyncStorage.getItem(onboarding.id)
     data["holidays"] = holidays
+    data["holidays"].dates = (data["holidays"].dates).sort(compareHolidayDates)
     data["devMode"] = {code: devMode.pinCode, active: false}
     if ( devMode.currentVersion != appConfig.expo.version) {
       data["onboarding"] = {

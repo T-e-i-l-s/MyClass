@@ -29,7 +29,8 @@
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-virtualized-view": "^1.0.0",
     "react-native-web": "~0.19.6",
-    "react-navigation": "^5.0.0"
+    "react-navigation": "^5.0.0",
+    "vexo-analytics": "^1.3.13"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

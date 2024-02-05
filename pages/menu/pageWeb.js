@@ -6,7 +6,7 @@ import React, { useRef, useState } from 'react'
 import HomeworkScreen from './homework/page'
 import ScheduleScreen from './schedule/page'
 import HolidaysScreen from './holidays/page'
-import { Swipeable } from 'react-native-gesture-handler'
+// import { Swipeable } from 'react-native-gesture-handler'
 
 export default function App({navigation, route}) {
 
@@ -24,15 +24,74 @@ export default function App({navigation, route}) {
     new Animated.Value(0)
   ).current
 
+  const defaultIconSide = 1
+  const currentIconSide = 1.15
+  const iconAnimationDuration = 150
+  const icon1Side = useRef(
+    new Animated.Value(defaultIconSide)
+  ).current
+  const icon2Side = useRef(
+    new Animated.Value(currentIconSide)
+  ).current
+  const icon3Side = useRef(
+    new Animated.Value(defaultIconSide)
+  ).current
+
+
   const openHolidays = () => {
+    Animated.timing(icon1Side, {
+      toValue: currentIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon3Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon2Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
     setScreen('holidays')
   }
 
   const openSchedule = () => {
+    Animated.timing(icon3Side, {
+      toValue: currentIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon1Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon2Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
     setScreen('schedule')
   }
 
   const openHomework = () => {
+    Animated.timing(icon2Side, {
+      toValue: currentIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon1Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon3Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
     setScreen('homework')
   }
 
@@ -69,17 +128,17 @@ export default function App({navigation, route}) {
       
       {/* <GestureHandlerRootView style={{width: '100%'}}> */}
      
-        <Swipeable 
+        {/* <Swipeable 
         containerStyle={{width: '100%', paddingBottom: Math.max(0, Dimensions.get('window').height - webPageHeight)}}
-        dragOffsetFromLeftEdge={100}
-        dragOffsetFromRightEdge={100}
+        dragOffsetFromLeftEdge={110}
+        dragOffsetFromRightEdge={110}
         onSwipeableWillClose={(dir) => {
           if ( dir == 'left' ) {
             swipeLeft()
           } else {
             swipeRight()
           }
-        }}>
+        }}> */}
   
           <SafeAreaView 
           onLayout={(event) => setWebPageHeight(event.nativeEvent.layout.height)}
@@ -90,16 +149,14 @@ export default function App({navigation, route}) {
             <Animated.View
             style={{opacity: pageOpacity, width: '100%', height: '100%'}}>
                 
-              <View 
-              style={styles.navBar} 
-              onLayout={(event) => setBlockHeight(event.nativeEvent.layout.height)}>
+              <View style={styles.navBar} onLayout={(event) => setBlockHeight(event.nativeEvent.layout.height)}>
 
                 <TouchableHighlight 
                 onLongPress={() => {navigation.navigate('PasswordScreen', param)}} 
                 underlayColor={'rgba(255, 0, 255,0)'}
                 onPress={openHolidays}
                 style={styles.navButton}>
-                  <Image style={styles.navIcon} source={
+                  <Animated.Image style={[styles.navIcon,{transform:[{scale:icon1Side}]}]} source={
                     screen == 'holidays' ? 
                     require('../../assets/icons/navigation/holidays1.png') : 
                     require('../../assets/icons/navigation/holidays0.png')
@@ -110,7 +167,7 @@ export default function App({navigation, route}) {
                 underlayColor={'rgba(255, 0, 255,0)'}
                 onPress={openHomework}
                 style={styles.navButton}>
-                  <Image style={styles.navIcon} source={
+                  <Animated.Image style={[styles.navIcon,{transform:[{scale:icon2Side}]}]} source={
                     screen == 'homework' ? 
                     require('../../assets/icons/navigation/homework1.png') : 
                     require('../../assets/icons/navigation/homework0.png')
@@ -121,7 +178,7 @@ export default function App({navigation, route}) {
                 underlayColor={'rgba(255, 0, 255,0)'}
                 onPress={openSchedule}
                 style={styles.navButton}>
-                  <Image style={styles.navIcon} source={
+                  <Animated.Image style={[styles.navIcon,{transform:[{scale:icon3Side}]}]} source={
                     screen == 'schedule' ? 
                     require('../../assets/icons/navigation/schedule1.png') : 
                     require('../../assets/icons/navigation/schedule0.png')
@@ -154,7 +211,7 @@ export default function App({navigation, route}) {
 
           </SafeAreaView>
 
-        </Swipeable>  
+        {/* </Swipeable>   */}
   
       {/* </GestureHandlerRootView> */}
 

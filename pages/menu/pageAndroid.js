@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import { Text, View, Animated, Platform, Dimensions, TouchableHighlight, Image } from 'react-native'
+import { View, Animated, Platform, Dimensions, TouchableHighlight, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import styleSheet from './styles'
 import React, { useRef, useState } from 'react'
@@ -8,6 +8,7 @@ import ScheduleScreen from './schedule/page'
 import HolidaysScreen from './holidays/page'
 import GestureRecognizer from 'react-native-swipe-gestures'
 
+let count = 0;
 export default function App({navigation, route}) {
 
   const param = route.params
@@ -17,21 +18,83 @@ export default function App({navigation, route}) {
 
   const [screen, setScreen] = useState('homework')
 
+  const [touchStartX, setTouchStartX] = useState()
+  const [touchStartY, setTouchStartY] = useState()
+
   const [navBlockHeight,setBlockHeight] = useState(0)
 
   const pageOpacity = useRef(
     new Animated.Value(0)
   ).current
 
+  const defaultIconSide = 1
+  const currentIconSide = 1.15
+  const iconAnimationDuration = 100
+  const icon1Side = useRef(
+    new Animated.Value(defaultIconSide)
+  ).current
+  const icon2Side = useRef(
+    new Animated.Value(currentIconSide)
+  ).current
+  const icon3Side = useRef(
+    new Animated.Value(defaultIconSide)
+  ).current
+
+
   const openHolidays = () => {
+    Animated.timing(icon1Side, {
+      toValue: currentIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon3Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon2Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
     setScreen('holidays')
   }
 
   const openSchedule = () => {
+    Animated.timing(icon3Side, {
+      toValue: currentIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon1Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon2Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
     setScreen('schedule')
   }
 
   const openHomework = () => {
+    Animated.timing(icon2Side, {
+      toValue: currentIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon1Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
+    Animated.timing(icon3Side, {
+      toValue: defaultIconSide,
+      duration: iconAnimationDuration,
+      useNativeDriver: true
+    }).start()
     setScreen('homework')
   }
 
@@ -50,6 +113,18 @@ export default function App({navigation, route}) {
       openSchedule()
     }
   }
+
+  const handleTouch = (event) => {
+    const touchEndX = event.nativeEvent.locationX
+    const touchEndY = event.nativeEvent.locationY
+    if (Math.abs(touchEndY-touchStartY) < 70 && Math.abs(touchEndX-touchStartX) > 10) {
+      if (touchEndX < touchStartX) {
+        swipeLeft()
+      } else {
+        swipeRight()
+      }
+    }
+  }
   
   React.useEffect(() => {
     const focusHandler = navigation.addListener('focus', () => {
@@ -64,18 +139,24 @@ export default function App({navigation, route}) {
 
   
   const config = {
-    gestureIsClickThreshold: 45,
-    directionalOffsetThreshold: 45
+    gestureIsClickThreshold: 15,
+    directionalOffsetThreshold: 15
   };
 
   return (
     <View style={styles.container}>
 
       <GestureRecognizer
+      onTouchStart={(event) => {
+        setTouchStartX(event.nativeEvent.locationX)
+        setTouchStartY(event.nativeEvent.locationY)
+      }}
+      onTouchEnd={(event) => handleTouch(event)}
       style={{width: '100%', height: '100%'}}
       config={config}
-      onSwipeLeft={() => swipeLeft()}
-      onSwipeRight={() => swipeRight()}>
+      // onSwipeLeft={() => swipeLeft()}
+      // onSwipeRight={() => swipeRight()}
+      >
     
         <SafeAreaView style={{width: '100%', backgroundColor: theme.background}}>
     
@@ -110,7 +191,7 @@ export default function App({navigation, route}) {
               underlayColor={'rgba(255, 0, 255,0)'}
               onPress={openHolidays}
               style={styles.navButton}>
-                <Image style={styles.navIcon} source={
+                <Animated.Image style={[styles.navIcon,{transform:[{scale:icon1Side}]}]} source={
                   screen == 'holidays' ? 
                   require('../../assets/icons/navigation/holidays1.png') : 
                   require('../../assets/icons/navigation/holidays0.png')
@@ -121,7 +202,7 @@ export default function App({navigation, route}) {
               underlayColor={'rgba(255, 0, 255,0)'}
               onPress={openHomework}
               style={styles.navButton}>
-                <Image style={styles.navIcon} source={
+                <Animated.Image style={[styles.navIcon,{transform:[{scale:icon2Side}]}]} source={
                   screen == 'homework' ? 
                   require('../../assets/icons/navigation/homework1.png') : 
                   require('../../assets/icons/navigation/homework0.png')
@@ -132,7 +213,7 @@ export default function App({navigation, route}) {
               underlayColor={'rgba(255, 0, 255,0)'}
               onPress={openSchedule}
               style={styles.navButton}>
-                <Image style={styles.navIcon} source={
+                <Animated.Image style={[styles.navIcon,{transform:[{scale:icon3Side}]}]} source={
                   screen == 'schedule' ? 
                   require('../../assets/icons/navigation/schedule1.png') : 
                   require('../../assets/icons/navigation/schedule0.png')
