@@ -1,24 +1,28 @@
-import Page from './navigate'
+import Navigation from './navigate'
 import { View, StatusBar } from 'react-native'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
+// import { vexo } from 'vexo-analytics' // Analytic platform
 
-import { vexo } from 'vexo-analytics'
-vexo('04e43c32-9288-4a2a-af12-27eef87ac681')
+// Connecting application with Vexo
+// vexo('04e43c32-9288-4a2a-af12-27eef87ac681')
 
+// Deployment Splash screen(to solve growth after start)
 SplashScreen.preventAutoHideAsync()
 
-let flag = false
+let isReady = false // Ready status
 
 export default function App() {
 
+  // Loading fonts
   const [fontsLoaded] = useFonts({
     'regular': require('./assets/fonts/onest.ttf'),
     'semi': require('./assets/fonts/onest-semi.ttf'),
   })
 
-  if ( !flag ) {
-    flag = true
+  // Handling ready status
+  if ( !isReady ) {
+    isReady = true
     setTimeout(() => {
       SplashScreen.hideAsync()
     },600)
@@ -29,7 +33,7 @@ export default function App() {
       <StatusBar style='auto'/>
       {
         fontsLoaded ? (
-          <Page/>
+          <Navigation/>
         ): null
       }
     </View>

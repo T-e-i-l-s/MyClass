@@ -2,43 +2,58 @@ import { Text, View, TextInput, TouchableHighlight, Image, ScrollView } from 're
 import styleSheet from './styles'
 import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-
 import { initializeApp } from "firebase/app";
 import firebaseConfig from '../../keys/firebase.json'
 import push from '../../firebase/push'
 
+
 const db = initializeApp(firebaseConfig);
+
 
 export default function App({navigation, route}) {
   
   const param = route.params
-  const [theme, setTheme] = useState(require('../../themes/dark.json'))
-  const [styles, setStyles] = useState(styleSheet(theme))
+
+  const theme = route.params.data.theme == 'dark' ? require('../../themes/dark.json') : require('../../themes/light.json')
+  const styles = styleSheet(theme)
 
   const [subject, setSubject] = useState(param.source.subject)
 
+
+  // Data updating function
   const saveData = () => {
+
+    // Updating timetable
     let timetable = param.data.data.schedule[param.source.day]
     if ( param.edit ) {
       timetable[param.source.id] = subject
     } else {
       timetable.push(subject)
     }
+
+    // Saving updates
     let result = param.data
     result.data.schedule[param.source.day] = timetable
+
+    // Push updated homework list to firebase
     push(db, 'MyClass', 'Timetable', param.source.day, timetable)
+    
+    // Navigationg to correct screen
     if ( Platform.OS =='web' ) {
       navigation.navigate('MenuWeb', result)
     } else {
       navigation.navigate('MenuAndroid', result)
     }
+
   }
+
 
   return (
     <View style={styles.container}>
 
       <StatusBar style='auto'/>
 
+      {/* Arrow */}
       <View style={styles.arrowBar}>
         <TouchableHighlight 
         underlayColor={'rgba(255, 0, 255,0)'}
@@ -53,6 +68,7 @@ export default function App({navigation, route}) {
         </TouchableHighlight>
       </View>
 
+      {/* Lesson input */}
       <Text style={styles.inputTitle}>Урок</Text>
       <TextInput
       multiline={true}
@@ -62,6 +78,7 @@ export default function App({navigation, route}) {
       onChangeText={(e) => setSubject(e)}
       defaultValue={subject}/>
       
+      {/* Save button */}
       <Text style={styles.button} onPress={saveData}>Сохранить</Text>
 
     </View>

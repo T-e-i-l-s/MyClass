@@ -22,7 +22,9 @@ export default function App(route) {
 
   const [currentSchedule, setCurrentSchedule] = useState(schedule[days[day-1]])
   
-  const [theme, setTheme] = useState(require('../../../themes/dark.json'))
+  const [theme, setTheme] = useState(
+    route.data.theme == 'dark' ? require('../../../themes/dark.json') : require('../../../themes/light.json')
+  )
   const [styles, setStyles] = useState(styleSheet(theme))
 
   const [reloadFlatList, setReloadFlatList] = useState(0)
@@ -72,7 +74,10 @@ export default function App(route) {
         data={['пн','вт','ср','чт','пт','сб']}
         renderItem={({item, index}) => (
           <View onStartShouldSetResponder={() => changeDay(index+1)}>
-            <Text style={[styles.day,{backgroundColor: index+1 == day ? theme.additional : theme.main}]}>{item}</Text>
+            <Text style={[styles.day,{
+              backgroundColor: index+1 == day ? theme.additional : theme.main,
+              color: day-1 == index ? theme.text2 : theme.text
+            }]}>{item}</Text>
           </View>
         )}/>
       </View>

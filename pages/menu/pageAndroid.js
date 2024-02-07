@@ -7,13 +7,16 @@ import HomeworkScreen from './homework/page'
 import ScheduleScreen from './schedule/page'
 import HolidaysScreen from './holidays/page'
 import GestureRecognizer from 'react-native-swipe-gestures'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-let count = 0;
+
 export default function App({navigation, route}) {
 
   const param = route.params
 
-  const [theme, setTheme] = useState(require('../../themes/dark.json'))
+  const [theme, setTheme] = useState(
+    route.params.theme == 'dark' ? require('../../themes/dark.json') : require('../../themes/light.json')
+  )
   const [styles, setStyles] = useState(styleSheet(theme))
 
   const [screen, setScreen] = useState('homework')
@@ -125,6 +128,18 @@ export default function App({navigation, route}) {
       }
     }
   }
+
+  const changeTheme = async () => {
+    if (param.theme == 'dark') {
+      AsyncStorage.setItem('theme', 'light').then(() => {
+        navigation.navigate('Splash')
+      })
+    } else {
+      AsyncStorage.setItem('theme', 'dark').then(() => {
+        navigation.navigate('Splash')
+      })
+    }
+  }
   
   React.useEffect(() => {
     const focusHandler = navigation.addListener('focus', () => {
@@ -141,7 +156,7 @@ export default function App({navigation, route}) {
   const config = {
     gestureIsClickThreshold: 15,
     directionalOffsetThreshold: 15
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -163,12 +178,27 @@ export default function App({navigation, route}) {
           <StatusBar style='auto'/>
     
           <Animated.View style={{opacity: pageOpacity, width: '100%', height: '100%'}}>
+
+            <View 
+            style={styles.topBar}
+            onStartShouldSetResponder={() => changeTheme()}>
+              <TouchableHighlight 
+              onPress={() => changeTheme()} 
+              underlayColor={'rgba(255, 0, 255,0)'}
+              style={styles.themeButton}>
+                <Animated.Image style={styles.themeIcon} source={
+                  param.theme == 'dark' ? 
+                  require('../../assets/icons/dark.png') :
+                  require('../../assets/icons/light.png')
+                }/>
+              </TouchableHighlight>
+            </View>  
     
             <View 
             style={[
               styles.mainArea,
               {
-                height: Platform.OS == 'android' ? Dimensions.get('window').height - navBlockHeight - 2 : 'auto'
+                height: Platform.OS == 'android' ? Dimensions.get('window').height - navBlockHeight - 52 : 'auto'
               }
             ]}>
     

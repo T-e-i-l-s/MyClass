@@ -24,7 +24,9 @@ export default function App(route) {
     'Декабря',
   ]
 
-  const [theme, setTheme] = useState(require('../../../themes/dark.json'))
+  const [theme, setTheme] = useState(
+    route.data.theme == 'dark' ? require('../../../themes/dark.json') : require('../../../themes/light.json')
+  )
   const [styles, setStyles] = useState(styleSheet(theme))
 
   return (

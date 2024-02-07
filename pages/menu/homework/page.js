@@ -20,7 +20,9 @@ export default function App(route) {
   const days1 = ['понедельник','вторник','среду','четверг','пятницу','субботу']
   const days2 = ['понедельник','вторник','среда','четверг','пятница','суббота']
   
-  const [theme, setTheme] = useState(require('../../../themes/dark.json'))
+  const [theme, setTheme] = useState(
+    route.data.theme == 'dark' ? require('../../../themes/dark.json') : require('../../../themes/light.json')
+  )
   const [styles, setStyles] = useState(styleSheet(theme))
   const date = new Date()
   const dateNow = [date.getDate(), date.getMonth()+1, date.getFullYear()]

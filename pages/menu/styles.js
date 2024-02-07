@@ -10,6 +10,23 @@ export default (theme) => StyleSheet.create({
     // justifyContent: 'flex-start'
   },
 
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    width: '95%',
+  },
+
+  themeButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10
+  },
+
+  themeIcon: {
+    width: 30,
+    height: 30,
+  },
+
   navBar: {
     justifyContent: 'center',
     flexDirection: 'row',

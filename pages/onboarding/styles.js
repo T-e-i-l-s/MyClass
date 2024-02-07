@@ -37,7 +37,7 @@ export default (theme) => StyleSheet.create({
     bottom: 20,
     width: '75%',
     backgroundColor: theme.additional2,
-    color: theme.text,
+    color: theme.text2,
     fontSize: 21,
     fontFamily: 'semi',
     textAlign: 'center',

@@ -2,63 +2,55 @@ import { Text, View, TextInput, TouchableHighlight, Image, ScrollView } from 're
 import styleSheet from './styles'
 import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-
 import { initializeApp } from "firebase/app";
 import firebaseConfig from '../../keys/firebase.json'
 import push from '../../firebase/push'
+import CD from '../../Hooks/CD'
+
 
 const db = initializeApp(firebaseConfig);
+
 
 export default function App({navigation, route}) {
   
   const param = route.params
-  const [theme, setTheme] = useState(require('../../themes/dark.json'))
-  const [styles, setStyles] = useState(styleSheet(theme))
+
+  const theme = route.params.data.theme == 'dark' ? require('../../themes/dark.json') : require('../../themes/light.json')
+  const styles = styleSheet(theme)
 
   const [subject, setSubject] = useState(param.source.subject)
   const [homework, setHomework] = useState(param.source.homework)
   const [date, setDate] = useState(param.source.date)
 
-  const compareDates = (hw1, hw2) => {
-    const date1 = hw1.date
-    const date2 = hw2.date
-    const homeworkDate1 = date1.split('.')
-    const homeworkDate2 = date2.split('.')
-    const unixTime1 = new Date(
-      parseInt(homeworkDate1[2]), 
-      parseInt(homeworkDate1[1] - 1), 
-      parseInt(homeworkDate1[0]))
-    const unixTime2 = new Date(
-      parseInt(homeworkDate2[2]), 
-      parseInt(homeworkDate2[1] - 1), 
-      parseInt(homeworkDate2[0]))
 
-    if (unixTime1 > unixTime2 || unixTime1 == 'Invalid Date' || unixTime2 == 'Date') {
-      return -1
-    } else if (unixTime1 == unixTime2) {
-      return 0
-    } else {
-      return 1
-    }
-  }
-
+  // Data updating function
   const saveData = () => {
+
+    // Updating homework list
     let tasks = param.data.data.homework.tasks
     if ( param.edit ) {
       tasks[param.source.id] = {subject: subject, homework: homework, date: date}
     } else {
       tasks.unshift({subject: subject, homework: homework, date: date})
     }
-    tasks.sort(compareDates)
+    tasks.sort(CD)
+
+    // Saving updates
     let result = param.data
     result.data.homework.tasks = tasks
+
+    // Push updated homework list to firebase
     push(db, 'MyClass', 'Homework', 'tasks', tasks)
+
+    // Navigationg to correct screen
     if ( Platform.OS =='web' ) {
       navigation.navigate('MenuWeb', result)
     } else {
       navigation.navigate('MenuAndroid', result)
     }
+    
   }
+
 
   return (
     <View style={styles.container}>
@@ -67,6 +59,7 @@ export default function App({navigation, route}) {
       
       <ScrollView style={{width: '90%'}} showsVerticalScrollIndicator={false}>
 
+        {/* Arrow */}
         <View style={styles.arrowBar}>
           <TouchableHighlight 
           underlayColor={'rgba(255, 0, 255,0)'}
@@ -81,6 +74,7 @@ export default function App({navigation, route}) {
           </TouchableHighlight>
         </View>
 
+        {/* Subject input */}
         <Text style={styles.inputTitle}>Предмет</Text>
         <TextInput
         multiline={true}
@@ -90,6 +84,7 @@ export default function App({navigation, route}) {
         onChangeText={(e) => setSubject(e)}
         defaultValue={subject}/>
 
+        {/* Task input */}
         <Text style={styles.inputTitle}>Задание</Text>
         <TextInput
         multiline={true}
@@ -99,6 +94,7 @@ export default function App({navigation, route}) {
         onChangeText={(e) => setHomework(e)}
         defaultValue={homework}/>
 
+        {/* Date input */}
         <Text style={styles.inputTitle}>Дата</Text>
         <TextInput
         multiline={true}
@@ -110,6 +106,7 @@ export default function App({navigation, route}) {
       
       </ScrollView>
 
+      {/* Save button */}
       <Text style={styles.button} onPress={saveData}>Сохранить</Text>
 
     </View>

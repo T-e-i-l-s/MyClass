@@ -1,34 +1,54 @@
 import { Text, View, TextInput, TouchableHighlight, Image, Platform } from 'react-native'
-import styleSheet from './styles'
 import { useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
+import styleSheet from './styles'
 
 export default function App({navigation, route}) {
   
   const param = route.params
-  const [theme, setTheme] = useState(require('../../themes/dark.json'))
-  const [styles, setStyles] = useState(styleSheet(theme))
 
-  const [underlayColor, setUnderlayColor] = useState(theme.additional)
-  const [inputTitle, setInputTitle] = useState("Пароль")
+  const theme = route.params.theme == 'dark' ? require('../../themes/dark.json') : require('../../themes/light.json')
+  const styles = styleSheet(theme)
 
-  const password = param.data.devMode.code
-  const [inclusedPassword, setIncludedPassword] = useState("")
+  const [inputTitle, setInputTitle] = useState("Пароль") // Title of bottom input border
+  const [underlayColor, setUnderlayColor] = useState(theme.additional) // Color of bottom input border
 
-  const checkPassword = () => {
-    if ( password == inclusedPassword ) {
+  const password = param.data.devMode.code // Current password
+  const [includedPassword, setIncludedPassword] = useState("")
+
+
+  // Password verification function
+  const checkPassword = () => { 
+    
+    if ( password == includedPassword ) { // If password is correct
+
+       // dev mode activation
       let result = param
       result.data.devMode.active = !result.data.devMode.active
+
+      /*
+      There are two Menu screens in this application
+      It's important bacause of the gestures
+      On android we use community library called "react-native-swipe-gestures"
+      On the web we use "react-native-gesture-handler"
+      */
+
+      // Navigation to the correct screen
       if ( Platform.OS =='web' ) {
         navigation.navigate('MenuWeb', result)
       } else {
         navigation.navigate('MenuAndroid', result)
       }
-    } else {
+
+    } else { // If password is incorrect
+
       setUnderlayColor('red')
       setInputTitle('Неверный пароль')
+
     }
+
   }
+
 
   return (
     <View style={styles.container}>
@@ -55,8 +75,9 @@ export default function App({navigation, route}) {
       style={[styles.input, {borderBottomColor: underlayColor}]}
       placeholderTextColor={theme.text}
       cursorColor={theme.additional}
-      onChangeText={(e) => {
-        setIncludedPassword(e)
+      secureTextEntry={true}
+      onChangeText={(password) => {
+        setIncludedPassword(password)
         setUnderlayColor(theme.additional)
         setInputTitle('Пароль')
       }}/>
@@ -64,5 +85,6 @@ export default function App({navigation, route}) {
       <Text style={styles.button} onPress={checkPassword}>Войти</Text>
 
     </View>
-  );
+  )
+
 }

@@ -12,7 +12,9 @@ export default function App({navigation, route}) {
 
   const param = route.params
 
-  const [theme, setTheme] = useState(require('../../themes/dark.json'))
+  const [theme, setTheme] = useState(
+    route.params.theme == 'dark' ? require('../../themes/dark.json') : require('../../themes/light.json')
+  )
   const [styles, setStyles] = useState(styleSheet(theme))
 
   const [screen, setScreen] = useState('homework')
