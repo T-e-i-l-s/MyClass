@@ -6,8 +6,53 @@ export default (theme) => StyleSheet.create({
     flex: 1,
     // backgroundColor: theme.background,
     alignItems: 'center',
-    height: '100%',
     justifyContent: 'flex-start',
+    height: '100%',
+  },
+
+  scrollContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+
+  currentDateBlock: {
+    width: '95%',
+  },
+
+  currentWeekday: {
+    fontSize: 23,
+    fontFamily: 'semi',
+    color: theme.text,
+    marginTop: 10,
+  },
+
+  currentDate: {
+    fontSize: 18,
+    fontFamily: 'regular',
+    color: theme.text,
+    marginTop: 4,
+  },
+
+  archiveButton: {
+    width: '95%',
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 10
+  },
+
+  archiveButtonTitle: {
+    fontSize: 20,
+    fontFamily: 'regular',
+    color: theme.text2,
+  },
+
+  title: {
+    width: '95%',
+    fontSize: 23,
+    fontFamily: 'semi',
+    color: theme.text,
+    marginTop: 10,
   },
 
   addButton: {
@@ -43,7 +88,6 @@ export default (theme) => StyleSheet.create({
   subject: {
     fontSize: 18,
     fontFamily: 'semi',
-    fontWeight:'700',
     color: theme.text,
   },
 
@@ -54,7 +98,7 @@ export default (theme) => StyleSheet.create({
     marginTop: 4
   },
   
-  date: {
+  homeworkDate: {
     fontSize: 17,
     fontFamily: 'regular',
     color: theme.hiddenText,

@@ -2,16 +2,12 @@
 /*
 CD - Compare Dates
 This function working as comparator for two dates
-It compares proximity of the dates to the begining of the year
-*/
+It compares unixTime of the dates
 
-/*
 Input:
 1) First linked list of objects {date: [string]}
 2) Second linked list of objects {date: [string]}
-*/
 
-/*
 Output:
 -1, 0, 1 like simple comparator
 */

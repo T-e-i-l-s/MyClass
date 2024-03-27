@@ -1,263 +1,136 @@
-import { StatusBar } from 'expo-status-bar'
-import { View, Animated, Platform, Dimensions, TouchableHighlight, Image } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import styleSheet from './styles'
-import React, { useRef, useState } from 'react'
-import HomeworkScreen from './homework/page'
-import ScheduleScreen from './schedule/page'
-import HolidaysScreen from './holidays/page'
-import GestureRecognizer from 'react-native-swipe-gestures'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { StatusBar } from "expo-status-bar";
+import { View, Animated } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useRef, useState } from "react";
+import GestureRecognizer from "react-native-swipe-gestures";
+import styleSheet from "./styles";
+import Animation from "../../Hooks/Animations/Animation";
+import Container from "./container";
+import changeTheme from "../../Hooks/HandlingData/ChangeTheme";
+import Tabs from "./tabs";
 
+export default function App({ navigation, route }) {
+  const param = route.params;
 
-export default function App({navigation, route}) {
+  const theme =
+    route.params.theme == "dark"
+      ? require("../../themes/dark.json")
+      : require("../../themes/light.json");
+  const styles = styleSheet(theme);
 
-  const param = route.params
+  // Current screen
+  const [screen, setScreen] = useState("homework");
 
-  const [theme, setTheme] = useState(
-    route.params.theme == 'dark' ? require('../../themes/dark.json') : require('../../themes/light.json')
-  )
-  const [styles, setStyles] = useState(styleSheet(theme))
+  // The screen to go to
+  const [screenToOpen, setScreenToOpen] = useState("homework");
 
-  const [screen, setScreen] = useState('homework')
+  // Gesture start x, y
+  const [touchStartX, setTouchStartX] = useState();
+  const [touchStartY, setTouchStartY] = useState();
 
-  const [touchStartX, setTouchStartX] = useState()
-  const [touchStartY, setTouchStartY] = useState()
+  const [navBlockHeight, setBlockHeight] = useState(0);
 
-  const [navBlockHeight,setBlockHeight] = useState(0)
+  // Animation values
+  const pageOpacity = useRef(new Animated.Value(0)).current;
 
-  const pageOpacity = useRef(
-    new Animated.Value(0)
-  ).current
-
-  const defaultIconSide = 1
-  const currentIconSide = 1.15
-  const iconAnimationDuration = 100
-  const icon1Side = useRef(
-    new Animated.Value(defaultIconSide)
-  ).current
-  const icon2Side = useRef(
-    new Animated.Value(currentIconSide)
-  ).current
-  const icon3Side = useRef(
-    new Animated.Value(defaultIconSide)
-  ).current
-
-
-  const openHolidays = () => {
-    Animated.timing(icon1Side, {
-      toValue: currentIconSide,
-      duration: iconAnimationDuration,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(icon3Side, {
-      toValue: defaultIconSide,
-      duration: iconAnimationDuration,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(icon2Side, {
-      toValue: defaultIconSide,
-      duration: iconAnimationDuration,
-      useNativeDriver: true
-    }).start()
-    setScreen('holidays')
-  }
-
-  const openSchedule = () => {
-    Animated.timing(icon3Side, {
-      toValue: currentIconSide,
-      duration: iconAnimationDuration,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(icon1Side, {
-      toValue: defaultIconSide,
-      duration: iconAnimationDuration,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(icon2Side, {
-      toValue: defaultIconSide,
-      duration: iconAnimationDuration,
-      useNativeDriver: true
-    }).start()
-    setScreen('schedule')
-  }
-
-  const openHomework = () => {
-    Animated.timing(icon2Side, {
-      toValue: currentIconSide,
-      duration: iconAnimationDuration,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(icon1Side, {
-      toValue: defaultIconSide,
-      duration: iconAnimationDuration,
-      useNativeDriver: true
-    }).start()
-    Animated.timing(icon3Side, {
-      toValue: defaultIconSide,
-      duration: iconAnimationDuration,
-      useNativeDriver: true
-    }).start()
-    setScreen('homework')
-  }
+  const containerOpacity = useRef(new Animated.Value(1)).current;
 
   const swipeRight = () => {
-    if ( screen == 'schedule' ) {
-      openHomework()
-    } else if ( screen == 'homework' ) {
-      openHolidays()
+    if (screen == "settings") {
+      setScreenToOpen("schedule");
+    } else if (screen == "schedule") {
+      setScreenToOpen("homework");
+    } else if (screen == "homework") {
+      setScreenToOpen("holidays");
     }
-  }
+  };
 
   const swipeLeft = () => {
-    if ( screen == 'holidays' ) {
-      openHomework()
-    } else if ( screen == 'homework' ) {
-      openSchedule()
+    if (screen == "holidays") {
+      setScreenToOpen("homework");
+    } else if (screen == "homework") {
+      setScreenToOpen("schedule");
+    } else if (screen == "schedule") {
+      setScreenToOpen("settings");
     }
-  }
+  };
 
   const handleTouch = (event) => {
-    const touchEndX = event.nativeEvent.locationX
-    const touchEndY = event.nativeEvent.locationY
-    if (Math.abs(touchEndY-touchStartY) < 70 && Math.abs(touchEndX-touchStartX) > 10) {
+    const touchEndX = event.nativeEvent.locationX;
+    const touchEndY = event.nativeEvent.locationY;
+    if (
+      Math.abs(touchEndY - touchStartY) < 70 &&
+      Math.abs(touchEndX - touchStartX) > 10
+    ) {
       if (touchEndX < touchStartX) {
-        swipeLeft()
+        swipeLeft();
       } else {
-        swipeRight()
+        swipeRight();
       }
     }
-  }
+  };
 
-  const changeTheme = async () => {
-    if (param.theme == 'dark') {
-      AsyncStorage.setItem('theme', 'light').then(() => {
-        navigation.navigate('Splash')
-      })
-    } else {
-      AsyncStorage.setItem('theme', 'dark').then(() => {
-        navigation.navigate('Splash')
-      })
-    }
-  }
-  
   React.useEffect(() => {
-    const focusHandler = navigation.addListener('focus', () => {
-      Animated.timing(pageOpacity, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true
-      }).start()
-    })
-    return focusHandler
-  }, [navigation])
-
-  
-  const config = {
-    gestureIsClickThreshold: 15,
-    directionalOffsetThreshold: 15
-  }
+    const focusHandler = navigation.addListener("focus", () => {
+      Animation(pageOpacity, 1, 1000);
+    });
+    const blurHandler = navigation.addListener("blur", () => {
+      Animation(pageOpacity, 0, 1000);
+    });
+    return focusHandler, blurHandler;
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
-
       <GestureRecognizer
-      onTouchStart={(event) => {
-        setTouchStartX(event.nativeEvent.locationX)
-        setTouchStartY(event.nativeEvent.locationY)
-      }}
-      onTouchEnd={(event) => handleTouch(event)}
-      style={{width: '100%', height: '100%'}}
-      config={config}
-      // onSwipeLeft={() => swipeLeft()}
-      // onSwipeRight={() => swipeRight()}
+        onTouchStart={(event) => {
+          setTouchStartX(event.nativeEvent.locationX);
+          setTouchStartY(event.nativeEvent.locationY);
+        }}
+        onTouchEnd={(event) => handleTouch(event)}
+        style={{ width: "100%", height: "100%" }}
+        config={{
+          gestureIsClickThreshold: 15,
+          directionalOffsetThreshold: 15,
+        }}
       >
-    
-        <SafeAreaView style={{width: '100%', backgroundColor: theme.background}}>
-    
-          <StatusBar style='auto'/>
-    
-          <Animated.View style={{opacity: pageOpacity, width: '100%', height: '100%'}}>
+        <SafeAreaView
+          style={{ width: "100%", backgroundColor: theme.background }}
+        >
+          <StatusBar style={route.params.theme == "dark" ? "light" : "dark"} />
 
-            <View 
-            style={styles.topBar}
-            onStartShouldSetResponder={() => changeTheme()}>
-              <TouchableHighlight 
-              onPress={() => changeTheme()} 
-              underlayColor={'rgba(255, 0, 255,0)'}
-              style={styles.themeButton}>
-                <Animated.Image style={styles.themeIcon} source={
-                  param.theme == 'dark' ? 
-                  require('../../assets/icons/dark.png') :
-                  require('../../assets/icons/light.png')
-                }/>
-              </TouchableHighlight>
-            </View>  
-    
-            <View 
-            style={[
-              styles.mainArea,
-              {
-                height: Platform.OS == 'android' ? Dimensions.get('window').height - navBlockHeight - 52 : 'auto'
+          <Animated.View
+            style={{ opacity: pageOpacity, width: "100%", height: "100%" }}
+          >
+            <Animated.View style={{ opacity: containerOpacity }}>
+              <Container
+                navigation={navigation}
+                route={route}
+                styles={styles}
+                screen={screen}
+                navBlockHeight={navBlockHeight}
+                changeTheme={() => changeTheme(navigation, param.theme)}
+              />
+            </Animated.View>
+
+            <View
+              onLayout={(event) =>
+                setBlockHeight(event.nativeEvent.layout.height)
               }
-            ]}>
-    
-                {
-                  screen == 'homework' ? (
-                    <HomeworkScreen data={param}/>
-                  ) : screen == 'holidays' ? (
-                    <HolidaysScreen data={param}/>
-                  ) : (
-                    <ScheduleScreen data={param}/>
-                  )
-                }
-    
+            >
+              <Tabs
+                navigation={navigation}
+                route={route}
+                screen={screen}
+                setScreen={setScreen}
+                containerOpacity={containerOpacity}
+                screenToOpen={screenToOpen}
+                setScreenToOpen={setScreenToOpen}
+              />
             </View>
-
-            <View style={styles.navBar} onLayout={(event) => setBlockHeight(event.nativeEvent.layout.height)}>
-
-              <TouchableHighlight 
-              onLongPress={() => {navigation.navigate('PasswordScreen', param)}} 
-              underlayColor={'rgba(255, 0, 255,0)'}
-              onPress={openHolidays}
-              style={styles.navButton}>
-                <Animated.Image style={[styles.navIcon,{transform:[{scale:icon1Side}]}]} source={
-                  screen == 'holidays' ? 
-                  require('../../assets/icons/navigation/holidays1.png') : 
-                  require('../../assets/icons/navigation/holidays0.png')
-                }/>
-              </TouchableHighlight>
-
-              <TouchableHighlight 
-              underlayColor={'rgba(255, 0, 255,0)'}
-              onPress={openHomework}
-              style={styles.navButton}>
-                <Animated.Image style={[styles.navIcon,{transform:[{scale:icon2Side}]}]} source={
-                  screen == 'homework' ? 
-                  require('../../assets/icons/navigation/homework1.png') : 
-                  require('../../assets/icons/navigation/homework0.png')
-                }/>
-              </TouchableHighlight>
-
-              <TouchableHighlight 
-              underlayColor={'rgba(255, 0, 255,0)'}
-              onPress={openSchedule}
-              style={styles.navButton}>
-                <Animated.Image style={[styles.navIcon,{transform:[{scale:icon3Side}]}]} source={
-                  screen == 'schedule' ? 
-                  require('../../assets/icons/navigation/schedule1.png') : 
-                  require('../../assets/icons/navigation/schedule0.png')
-                }/>
-              </TouchableHighlight>
-
-            </View>
-            
           </Animated.View>
-    
         </SafeAreaView>
-    
       </GestureRecognizer>
-       
     </View>
   );
 }

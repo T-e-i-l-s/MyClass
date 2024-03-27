@@ -7,7 +7,7 @@ export default (theme) =>
       height: Dimensions.get("window").height - StatusBar.currentHeight,
       backgroundColor: theme.background,
       alignItems: "center",
-      justifyContent: "flex-start",
+      justifyContent: "center",
       paddingTop: StatusBar.currentHeight,
     },
 
@@ -23,34 +23,71 @@ export default (theme) =>
       height: 35,
     },
 
-    inputTitle: {
-      width: "100%",
-      fontSize: 15,
+    title: {
+      width: "95%",
+      fontSize: 23,
       fontFamily: "semi",
-      textAlign: "left",
-      color: theme.hiddenText,
-      marginTop: 20,
+      color: theme.text,
+      marginTop: 10,
     },
 
-    input: {
-      borderBottomWidth: 2,
-      borderBottomColor: theme.additional,
+    homeworkBlock: {
       width: "100%",
+      backgroundColor: theme.main,
+      padding: 10,
+      marginTop: 10,
+      borderRadius: 10,
+    },
+
+    editButton: {
+      marginRight: 10,
+      marginBottom: 4,
+    },
+
+    editIcon: {
+      width: 27,
+      height: 27,
+    },
+
+    subject: {
+      fontSize: 18,
+      fontFamily: "semi",
+      color: theme.text,
+    },
+
+    task: {
+      fontSize: 18,
       fontFamily: "regular",
       color: theme.text,
+      marginTop: 4,
+    },
+
+    homeworkDate: {
+      fontSize: 17,
+      fontFamily: "regular",
+      color: theme.hiddenText,
+      marginTop: 10,
+    },
+
+    emptyTitle: {
       fontSize: 18,
-      paddingVertical: 5,
+      fontFamily: "semi",
+      color: theme.text,
+      textAlign: "center",
+      marginTop: 10,
+      paddingBottom: 10,
     },
 
     button: {
       position: "absolute",
       bottom: 20,
-      width: "95%",
+      width: "90%",
       backgroundColor: theme.additional,
       color: theme.text2,
       fontSize: 21,
       fontFamily: "semi",
       textAlign: "center",
+      fontWeight: "600",
       borderRadius: 50,
       marginTop: 10,
       padding: 15,

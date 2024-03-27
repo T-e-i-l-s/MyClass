@@ -1,17 +1,13 @@
 
 /*
-CDA - Compare Dates Approach
+Compare Dates Approach
 This function working as comparator for two dates
 It compares proximity of the dates with today
-*/
 
-/*
 Input:
 1) First linked list of objects {day: [your day], month: [your month]}
 2) Second linked list of objects {day: [your day], month: [your month]}
-*/
 
-/*
 Output:
 -1, 0, 1 like simple comparator
 */

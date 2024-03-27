@@ -1,4 +1,4 @@
-import { StyleSheet, StatusBar, Dimensions } from "react-native";
+import { StyleSheet, StatusBar, Dimensions, Platform } from "react-native";
 
 export default (theme) =>
   StyleSheet.create({
@@ -7,13 +7,14 @@ export default (theme) =>
       height: Dimensions.get("window").height - StatusBar.currentHeight,
       backgroundColor: theme.background,
       alignItems: "center",
-      justifyContent: "flex-start",
+      justifyContent: "center",
       paddingTop: StatusBar.currentHeight,
     },
 
     arrowBar: {
-      marginTop: 10,
       width: "95%",
+      position: "absolute",
+      top: Platform.OS == "web" ? 10 : StatusBar.currentHeight + 10,
       alignItems: "flex-start",
       justifyContent: "center",
     },
@@ -23,23 +24,12 @@ export default (theme) =>
       height: 35,
     },
 
-    inputTitle: {
-      width: "100%",
-      fontSize: 15,
+    title: {
+      width: "95%",
+      fontSize: 23,
       fontFamily: "semi",
-      textAlign: "left",
-      color: theme.hiddenText,
-      marginTop: 20,
-    },
-
-    input: {
-      borderBottomWidth: 2,
-      borderBottomColor: theme.additional,
-      width: "100%",
-      fontFamily: "regular",
       color: theme.text,
-      fontSize: 18,
-      paddingVertical: 5,
+      marginTop: 10,
     },
 
     button: {

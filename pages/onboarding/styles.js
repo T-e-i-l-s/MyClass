@@ -1,49 +1,49 @@
-import { StyleSheet, Dimensions } from "react-native"
+import { StyleSheet, Dimensions } from "react-native";
 
-export default (theme) => StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  
-  image: {
-    width: '75%',
-    height: Dimensions.get('window').width*0.75,
-  },
+export default (theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.background,
+      alignItems: "center",
+      justifyContent: "center",
+    },
 
-  title: {
-    width: '70%',
-    color: theme.text,
-    textAlign: 'center',
-    fontSize: 22,
-    fontFamily: 'semi',
-    fontWeight: '600',
-    marginTop: 10,
-  },
+    image: {
+      width: "75%",
+      height: Dimensions.get("window").width * 0.75,
+    },
 
-  text: {
-    width: '70%',
-    color: theme.text,
-    fontFamily: 'regular',
-    textAlign: 'center',
-    fontSize: 19,
-    marginTop: 5,
-  },
+    title: {
+      width: "70%",
+      color: theme.text,
+      textAlign: "center",
+      fontSize: 22,
+      fontFamily: "semi",
+      fontWeight: "600",
+      marginTop: 10,
+    },
 
-  button: {
-    position: 'absolute',
-    bottom: 20,
-    width: '75%',
-    backgroundColor: theme.additional2,
-    color: theme.text2,
-    fontSize: 21,
-    fontFamily: 'semi',
-    textAlign: 'center',
-    fontWeight: '600',
-    borderRadius: 50,
-    marginTop: 10,
-    padding: 15,
-  }
-});
+    text: {
+      width: "70%",
+      color: theme.text,
+      fontFamily: "regular",
+      textAlign: "center",
+      fontSize: 19,
+      marginTop: 5,
+    },
+
+    button: {
+      position: "absolute",
+      bottom: 20,
+      width: "75%",
+      backgroundColor: theme.additional,
+      color: theme.text2,
+      fontSize: 21,
+      fontFamily: "semi",
+      textAlign: "center",
+      borderRadius: 50,
+      marginTop: 10,
+      padding: 15,
+    },
+  });

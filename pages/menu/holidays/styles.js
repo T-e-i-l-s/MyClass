@@ -8,8 +8,26 @@ export default (theme) => StyleSheet.create({
     justifyContent: 'center',
   },
 
+  currentDateBlock: {
+    width: '95%',
+  },
+
+  currentWeekday: {
+    fontSize: 23,
+    fontFamily: 'semi',
+    color: theme.text,
+    marginTop: 10,
+  },
+
+  currentDate: {
+    fontSize: 18,
+    fontFamily: 'regular',
+    color: theme.text,
+    marginTop: 4,
+  },
+
   block: {
-    width: '100%',
+    width: '95%',
     alignItems: 'center',
     flexDirection: 'row',
     backgroundColor: theme.main,
@@ -32,7 +50,7 @@ export default (theme) => StyleSheet.create({
 
   day: {
     width: '100%',
-    fontSize: 21,
+    fontSize: 20,
     textAlign: 'center',
     fontFamily: 'semi',
     color: theme.text,
@@ -40,7 +58,7 @@ export default (theme) => StyleSheet.create({
 
   month: {
     width: '100%',
-    fontSize: 17,
+    fontSize: 18,
     textAlign: 'center',
     fontFamily: 'regular',
     color: theme.text,
@@ -52,6 +70,6 @@ export default (theme) => StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'semi',
     color: theme.text,
-    padding: 20,
+    padding: 10,
   },
 });

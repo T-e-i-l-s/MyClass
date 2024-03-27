@@ -53,18 +53,12 @@ export default function App({navigation, route}) {
   return (
     <View style={styles.container}>
 
-      <StatusBar style='auto'/>
+      <StatusBar style={route.params.theme == 'dark' ? 'light' : 'dark'}/>
 
       <View style={styles.arrowBar}>
         <TouchableHighlight 
         underlayColor={'rgba(255, 0, 255,0)'}
-        onPress={() => {
-          if ( Platform.OS =='web' ) {
-            navigation.navigate('MenuWeb', param)
-          } else {
-            navigation.navigate('MenuAndroid', param)
-          }
-        }}>
+        onPress={() => navigation.goBack()}>
           <Image style={styles.arrowIcon} source={require('../../assets/icons/arrow.png')}/>
         </TouchableHighlight>
       </View>
