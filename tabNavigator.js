@@ -1,7 +1,6 @@
 import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image, View, StatusBar } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Image, View } from "react-native";
 
 import darkThemeColors from "./themes/dark.json";
 import lightThemeColors from "./themes/light.json";
@@ -13,14 +12,17 @@ import SettingsScreen from "./src/pages/settings/page";
 
 const Tab = createBottomTabNavigator();
 
-function CustomTabBarButton({ icon0, icon1, props }) {
+function CustomTabBarButton({ icon0, icon1, props, theme }) {
   return (
     <View
       style={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: darkThemeColors.background,
+        backgroundColor:
+          theme == "dark"
+            ? darkThemeColors.background
+            : lightThemeColors.background,
       }}
       onStartShouldSetResponder={() => props.onPress()}
     >
@@ -56,6 +58,7 @@ export default function ({ route }) {
               icon0={require("./assets/icons/navigation/holidays0.png")}
               icon1={require("./assets/icons/navigation/holidays1.png")}
               props={props}
+              theme={route.params.theme}
             />
           ),
         }}
@@ -73,6 +76,7 @@ export default function ({ route }) {
               icon0={require("./assets/icons/navigation/homework0.png")}
               icon1={require("./assets/icons/navigation/homework1.png")}
               props={props}
+              theme={route.params.theme}
             />
           ),
         }}
@@ -90,6 +94,7 @@ export default function ({ route }) {
               icon0={require("./assets/icons/navigation/schedule0.png")}
               icon1={require("./assets/icons/navigation/schedule1.png")}
               props={props}
+              theme={route.params.theme}
             />
           ),
         }}
@@ -107,6 +112,7 @@ export default function ({ route }) {
               icon0={require("./assets/icons/navigation/settings0.png")}
               icon1={require("./assets/icons/navigation/settings1.png")}
               props={props}
+              theme={route.params.theme}
             />
           ),
         }}

@@ -1,4 +1,3 @@
-
 /*
 Get current weekday
 This function returns current weekday name
@@ -10,9 +9,17 @@ Output:
 weekday - string
 */
 
-const weekdays = ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота', 'Воскресенье']
+const weekdays = [
+  "Воскресенье",
+  "Понедельник",
+  "Вторник",
+  "Среда",
+  "Четверг",
+  "Пятница",
+  "Суббота",
+];
 
 export default function () {
-  const date = new Date()
-  return weekdays[date.getDay()-1]
+  const date = new Date();
+  return weekdays[date.getDay()];
 }

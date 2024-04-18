@@ -28,7 +28,7 @@ export default function App({ route }) {
       >
         <Text style={styles.title}>Настройки</Text>
 
-        {param.data.userName == undefined ? (
+        {param.username == undefined ? (
           <LinearGradient
             start={{ x: 0, y: 0.6 }}
             end={{ x: 1, y: 0.8 }}
@@ -53,7 +53,7 @@ export default function App({ route }) {
             colors={["#6721ec", "#8345EF", "#9768E9"]}
             style={styles.authBlock}
           >
-            <Text style={styles.authTitle}>{param.data.userName}</Text>
+            <Text style={styles.authTitle}>{param.username}</Text>
           </LinearGradient>
         )}
 

@@ -26,7 +26,7 @@ export default function App({ navigation }) {
     }
 
     // Loading user info color theme
-    const userName = await AsyncStorage.getItem("userName");
+    const username = await AsyncStorage.getItem("username");
 
     // Loading data
     let data = await loadData();
@@ -51,7 +51,7 @@ export default function App({ navigation }) {
       navigation.navigate("Onboarding", {
         data: data,
         theme: currentThemeName,
-        userName: userName,
+        username: username,
       });
     } else if (data.onboarding["isRevealed"] && onbooardingStatus != "shown") {
       // If current onboarding hasn't shown
@@ -59,7 +59,7 @@ export default function App({ navigation }) {
       navigation.navigate("Onboarding", {
         data: data,
         theme: currentThemeName,
-        userName: userName,
+        username: username,
       });
     } else {
       /*
@@ -72,7 +72,7 @@ export default function App({ navigation }) {
       navigation.navigate("Menu", {
         data: data,
         theme: currentThemeName,
-        userName: userName,
+        username: username,
       });
       // if (Platform.OS == "web") {
       //   navigation.navigate("MenuWeb", {

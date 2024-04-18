@@ -33,9 +33,8 @@ export default function App({ navigation, route }) {
       await push(db, "MyClass", "Users", pickedValue, {
         registration_date: new Date(),
       });
-      await AsyncStorage.setItem("userName", pickedValue);
-      route.params["userName"] = pickedValue;
-      navigation.navigate("Menu", route.params);
+      await AsyncStorage.setItem("username", pickedValue);
+      navigation.navigate("Splash");
     }
   };
 
