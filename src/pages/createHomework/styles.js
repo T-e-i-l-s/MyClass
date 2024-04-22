@@ -33,13 +33,16 @@ export default (theme) =>
     },
 
     input: {
+      width: "100%",
+      fontSize: 18,
+      color: theme.text,
+      fontFamily: "regular",
+      textAlign: "left",
+      fontWeight: "500",
+      paddingVertical: 5,
       borderBottomWidth: 2,
       borderBottomColor: theme.additional,
-      width: "100%",
-      fontFamily: "regular",
-      color: theme.text,
-      fontSize: 18,
-      paddingVertical: 5,
+      outlineStyle: "none",
     },
 
     button: {

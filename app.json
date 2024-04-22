@@ -24,7 +24,8 @@
       "package": "com.karimmust123.MyClass"
     },
     "web": {
-      "favicon": "./assets/icon.png"
+      "favicon": "./assets/icon.png",
+      "bundler": "metro"
     },
     "extra": {
       "eas": {

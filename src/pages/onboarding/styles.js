@@ -12,6 +12,7 @@ export default (theme) =>
     image: {
       width: "75%",
       height: Dimensions.get("window").width * 0.75,
+      resizeMode: "cover",
     },
 
     title: {

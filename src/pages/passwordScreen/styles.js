@@ -34,13 +34,15 @@ export default (theme) =>
     },
 
     input: {
-      borderBottomWidth: 2,
-      borderBottomColor: theme.additional,
       width: "95%",
-      fontFamily: "regular",
-      color: theme.text,
       fontSize: 18,
+      color: theme.text,
+      fontFamily: "regular",
+      textAlign: "left",
+      fontWeight: "500",
       paddingVertical: 5,
+      borderBottomWidth: 2,
+      outlineStyle: "none",
     },
 
     button: {

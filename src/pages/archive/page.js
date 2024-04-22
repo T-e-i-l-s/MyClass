@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableHighlight,
   Image,
+  Platform,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import React, { useRef } from "react";
@@ -36,7 +37,7 @@ export default function App({ navigation, route }) {
       <StatusBar style={route.params.data.theme == "dark" ? "light" : "dark"} />
 
       <Animated.ScrollView
-        style={{ width: "100%", opacity: pageOpacity }}
+        style={{ flex: 1, width: "100%", opacity: pageOpacity }}
         contentContainerStyle={{ width: "100%", alignItems: "center" }}
       >
         {/* Arrow */}
@@ -55,7 +56,7 @@ export default function App({ navigation, route }) {
         <Text style={styles.title}>Архив</Text>
 
         <FlatList
-          scrollEnabled={false}
+          scrollEnabled={Platform.OS == "web" ? true : false}
           style={{ width: "95%" }}
           data={homework}
           showsVerticalScrollIndicator={false}

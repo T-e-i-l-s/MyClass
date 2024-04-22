@@ -45,8 +45,8 @@ export default function App({ navigation, route }) {
     tasks.sort(CompareDates);
 
     // Saving updates
-    let result = param.data;
-    result.homework.tasks = tasks;
+    let result = param;
+    result.data.homework.tasks = tasks;
 
     // Push updated homework list to firebase
     push(db, "MyClass", "Homework", "tasks", tasks);
@@ -75,7 +75,6 @@ export default function App({ navigation, route }) {
         {/* Subject input */}
         <Text style={styles.inputTitle}>Предмет</Text>
         <TextInput
-          multiline={true}
           style={styles.input}
           placeholderTextColor={theme.text}
           cursorColor={theme.additional}
@@ -97,7 +96,6 @@ export default function App({ navigation, route }) {
         {/* Date input */}
         <Text style={styles.inputTitle}>Дата</Text>
         <TextInput
-          multiline={true}
           style={[styles.input, { marginBottom: 200 }]}
           placeholderTextColor={theme.text}
           cursorColor={theme.additional}

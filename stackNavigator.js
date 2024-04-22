@@ -24,7 +24,7 @@ const Stack = createNativeStackNavigator();
 export default function Navigate() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ cardStyle: { flex: 1 } }}>
         <Stack.Screen
           name="Splash"
           component={Splash}

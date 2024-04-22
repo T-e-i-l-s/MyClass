@@ -5,8 +5,6 @@ export default (theme) =>
     container: {
       flex: 1,
       backgroundColor: theme.background,
-      alignItems: "center",
-      justifyContent: "center",
       paddingTop: StatusBar.currentHeight,
     },
 

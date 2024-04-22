@@ -74,7 +74,6 @@ export default function App({ navigation, route }) {
 
       <Text style={styles.inputTitle}>{inputTitle}</Text>
       <TextInput
-        multiline={true}
         style={[styles.input, { borderBottomColor: underlayColor }]}
         placeholderTextColor={theme.text}
         cursorColor={theme.additional}

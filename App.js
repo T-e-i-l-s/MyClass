@@ -1,7 +1,12 @@
 import Navigation from "./stackNavigator";
-import { View, StatusBar } from "react-native";
+import { View, StatusBar, Platform } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+import dark from "./themes/dark.json";
+import light from "./themes/light.json";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import Holidays from "./src/pages/holidays/page";
 // import { vexo } from "vexo-analytics"; // Analytic platform
 
 // Connecting application with Vexo
@@ -11,6 +16,7 @@ import * as SplashScreen from "expo-splash-screen";
 SplashScreen.preventAutoHideAsync();
 
 let isReady = false; // Ready status
+const currentThemeName = "dark"; // await AsyncStorage.getItem("theme");
 
 export default function App() {
   // Loading fonts
@@ -27,11 +33,40 @@ export default function App() {
     }, 600);
   }
 
-  return (
+  return Platform.OS == "web" ? (
     <View
       style={{
         flex: 1,
-        backgroundColor: "#14110f",
+        backgroundColor:
+          currentThemeName == "dark" ? dark.background : light.background,
+        alignItems: "center",
+      }}
+    >
+      {/* <SafeAreaView
+        style={{
+          width: "100%",
+          height: "100%",
+          alignItems: "center",
+        }}
+      > */}
+      <View
+        style={{
+          width: "100%",
+          height: "100%",
+          maxWidth: 500,
+        }}
+      >
+        <StatusBar style={currentThemeName} />
+        {fontsLoaded ? <Navigation /> : null}
+      </View>
+      {/* </SafeAreaView> */}
+    </View>
+  ) : (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor:
+          currentThemeName == "dark" ? dark.background : light.background,
         alignItems: "center",
       }}
     >
@@ -42,7 +77,7 @@ export default function App() {
           maxWidth: 500,
         }}
       >
-        <StatusBar style="auto" />
+        <StatusBar style={currentThemeName} />
         {fontsLoaded ? <Navigation /> : null}
       </View>
     </View>

@@ -40,7 +40,7 @@ export default function ({ route }) {
     <Tab.Navigator
       initialRouteName="Задания"
       screenOptions={{
-        style: {
+        tabBarStyle: {
           borderTopWidth: 0,
           elevation: 0,
         },

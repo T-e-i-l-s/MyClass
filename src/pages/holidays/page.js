@@ -1,4 +1,4 @@
-import { Text, View, FlatList, ScrollView, Dimensions } from "react-native";
+import { Text, View, FlatList, ScrollView, Platform } from "react-native";
 import styleSheet from "./styles";
 import GetCurrentWeekday from "../../hooks/handlingDates/GetCurrentWeekday";
 import GetCurrentDate from "../../hooks/handlingDates/GetCurrentDate";
@@ -34,7 +34,6 @@ export default function App({ navigation, route }) {
   const separator = (
     <View
       style={{
-        width: Dimensions.get("window").width * 0.95,
         alignItems: "center",
       }}
     >
@@ -53,7 +52,11 @@ export default function App({ navigation, route }) {
     <View style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ width: "100%" }}
+        style={{
+          flex: 1,
+          width: "100%",
+          overflow: "scroll",
+        }}
         contentContainerStyle={{
           flexGrow: 1,
           width: "100%",
@@ -77,8 +80,7 @@ export default function App({ navigation, route }) {
         <FlatList
           ItemSeparatorComponent={separator}
           style={{ width: "95%", paddingBottom: 10 }}
-          contentContainerStyle={{ flexGrow: 1, alignItems: "center" }}
-          scrollEnabled={false}
+          scrollEnabled={Platform.OS == "web" ? true : false}
           showsVerticalScrollIndicator={false}
           data={dates}
           renderItem={({ item, index }) => (

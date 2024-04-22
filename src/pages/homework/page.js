@@ -6,7 +6,6 @@ import {
   TouchableHighlight,
   Platform,
   ScrollView,
-  Linking,
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -19,6 +18,7 @@ import GetProximity from "../../hooks/handlingDates/GetProximity";
 import DateToString from "../../hooks/handlingDates/DateToString";
 import GetCurrentWeekday from "../../hooks/handlingDates/GetCurrentWeekday";
 import GetCurrentDate from "../../hooks/handlingDates/GetCurrentDate";
+import ReportError from "../../views/reportError";
 
 const db = initializeApp(firebaseConfig);
 
@@ -86,20 +86,7 @@ export default function App({ route }) {
           <Text style={styles.archiveButtonTitle}>Сравни ответы β</Text>
         </LinearGradient> */}
 
-        {/* Archive */}
-        <LinearGradient
-          start={{ x: 0, y: 0.3 }}
-          end={{ x: 1, y: 0.8 }}
-          colors={["#6721ec", "#5CC9DF"]}
-          style={styles.archiveButton}
-          onStartShouldSetResponder={() =>
-            Linking.openURL(
-              "https://forms.yandex.com/u/65d7672e43f74f933aecbeff/"
-            )
-          }
-        >
-          <Text style={styles.archiveButtonTitle}>Сообщить об ошибке</Text>
-        </LinearGradient>
+        <ReportError theme={theme} />
 
         {/* Part title */}
         <Text style={styles.title}>Задания</Text>
@@ -140,8 +127,8 @@ export default function App({ route }) {
         ) : null}
 
         <FlatList
-          scrollEnabled={false}
-          style={{ width: "95%" }}
+          scrollEnabled={Platform.OS == "web" ? true : false}
+          style={{ width: "95%", paddingBottom: 10 }}
           extraData={reloadFlatList}
           data={homework}
           showsVerticalScrollIndicator={false}

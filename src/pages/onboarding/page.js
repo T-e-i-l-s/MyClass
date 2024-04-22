@@ -11,6 +11,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import styleSheet from "./styles";
 
+const screenWidth = Dimensions.get("window").width;
+
 export default function App({ navigation, route }) {
   const param = route.params;
 
@@ -74,11 +76,13 @@ export default function App({ navigation, route }) {
           renderItem={({ item }) => (
             <View
               style={{
-                width: Dimensions.get("window").width,
+                width: screenWidth > 500 ? 500 : screenWidth,
                 alignItems: "center",
               }}
             >
-              <Image style={styles.image} source={{ uri: item.image }} />
+              {screenWidth <= 500 ? (
+                <Image style={styles.image} source={{ uri: item.image }} />
+              ) : null}
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.text}>{item.text}</Text>
             </View>

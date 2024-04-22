@@ -30,8 +30,8 @@ export default function App({ navigation, route }) {
     }
 
     // Saving updates
-    let result = param.data;
-    result.schedule[param.source.day] = timetable;
+    let result = param;
+    result.data.schedule[param.source.day] = timetable;
 
     // Push updated homework list to firebase
     push(db, "MyClass", "Timetable", param.source.day, timetable);
@@ -59,7 +59,6 @@ export default function App({ navigation, route }) {
       {/* Lesson input */}
       <Text style={styles.inputTitle}>Урок</Text>
       <TextInput
-        multiline={true}
         style={styles.input}
         placeholderTextColor={theme.text}
         cursorColor={theme.additional}
