@@ -8,13 +8,20 @@ export default (theme) =>
       alignItems: "center",
       justifyContent: "center",
     },
+
+    gradient: {
+      width: "100%",
+      height: "100%",
+    },
+
     indicator: {
       width: 50,
       height: 50,
-      color: theme.additional,
+      color: theme.text2,
     },
+
     atributeText: {
-      color: theme.text,
+      color: theme.text2,
       fontFamily: "semi",
       fontSize: 18,
       marginTop: 10,

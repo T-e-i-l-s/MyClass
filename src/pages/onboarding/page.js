@@ -5,16 +5,23 @@ import {
   Dimensions,
   FlatList,
   Platform,
+  Animated,
 } from "react-native";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import styleSheet from "./styles";
+import { LinearGradient } from "expo-linear-gradient";
 
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 export default function App({ navigation, route }) {
   const param = route.params;
+
+  const gradientHeight = useRef(
+    new Animated.Value(param.gradientPosition)
+  ).current;
 
   const theme =
     route.params.theme == "dark"
@@ -58,8 +65,42 @@ export default function App({ navigation, route }) {
     }
   };
 
+  React.useEffect(() => {
+    console.log(param);
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(gradientHeight, {
+          toValue: screenHeight * 0.8,
+          duration: 3000, // Продолжительность анимации в миллисекундах
+          useNativeDriver: true, // Важно для анимации градиента
+        }),
+        Animated.timing(gradientHeight, {
+          toValue: screenHeight * 0.9,
+          duration: 3000, // Продолжительность анимации в миллисекундах
+          useNativeDriver: true, // Важно для анимации градиента
+        }),
+      ])
+    ).start();
+  });
+
   return (
     <View style={styles.container}>
+      {screenWidth <= 500 ? (
+        <Animated.View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            height: gradientHeight,
+            width: "100%",
+          }}
+        >
+          <LinearGradient
+            colors={[theme.background, theme.additional]}
+            style={styles.gradient}
+          ></LinearGradient>
+        </Animated.View>
+      ) : null}
+
       <StatusBar style={route.params.theme == "dark" ? "light" : "dark"} />
 
       <View style={{ flexDirection: "row", width: "100%" }}>

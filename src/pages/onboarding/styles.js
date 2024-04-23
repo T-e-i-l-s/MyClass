@@ -9,6 +9,11 @@ export default (theme) =>
       justifyContent: "center",
     },
 
+    gradient: {
+      width: "100%",
+      height: "100%",
+    },
+
     image: {
       width: "75%",
       height: Dimensions.get("window").width * 0.75,
@@ -36,15 +41,12 @@ export default (theme) =>
 
     button: {
       position: "absolute",
-      bottom: 20,
-      width: "75%",
-      backgroundColor: theme.additional,
+      bottom: 0,
+      width: "100%",
       color: theme.text2,
       fontSize: 21,
       fontFamily: "semi",
       textAlign: "center",
-      borderRadius: 50,
-      marginTop: 10,
-      padding: 15,
+      padding: 30,
     },
   });
