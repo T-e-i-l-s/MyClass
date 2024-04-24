@@ -14,6 +14,12 @@ export default (theme) =>
       height: "100%",
     },
 
+    gradientContainer: {
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+    },
+
     indicator: {
       width: 50,
       height: 50,

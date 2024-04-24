@@ -24,7 +24,8 @@ export default function App({ navigation }) {
   const [styles, setStyles] = useState(styleSheet(defaultTheme));
   const [theme, setTheme] = useState(defaultTheme);
 
-  const gradientHeight = useRef(new Animated.Value(screenHeight * 0.9)).current;
+  const gradient1Opacity = useRef(new Animated.Value(0)).current;
+  const gradient2Opacity = useRef(new Animated.Value(1)).current;
 
   const getData = async () => {
     // Updating color theme
@@ -50,7 +51,7 @@ export default function App({ navigation }) {
     const onbooardingStatus = await AsyncStorage.getItem(data.onboarding.id);
 
     // Navigating to the correct screen
-    if (data.devMode.currentVersion != appConfig.expo.version) {
+    if (data.devMode.currentVersion != appConfig.expo.version && 1 < 1) {
       // If version is outdated
       // Navigating to onboarding screen with warning "Доступна новая версия"
       data["onboarding"] = {
@@ -67,16 +68,16 @@ export default function App({ navigation }) {
         data: data,
         theme: currentThemeName,
         username: username,
-        gradientPosition: gradientHeight["_value"],
       });
-    } else if (data.onboarding["isRevealed"] && onbooardingStatus != "shown") {
+    } else if (
+      (data.onboarding["isRevealed"] && onbooardingStatus != "shown") ||
+      1 > 0
+    ) {
       // If current onboarding hasn't shown
-
       navigation.navigate("Onboarding", {
         data: data,
         theme: currentThemeName,
         username: username,
-        gradientPosition: gradientHeight,
       });
     } else {
       /*
@@ -95,22 +96,7 @@ export default function App({ navigation }) {
   };
 
   React.useEffect(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(gradientHeight, {
-          toValue: screenHeight * 0.8,
-          duration: 3000, // Продолжительность анимации в миллисекундах
-          useNativeDriver: true, // Важно для анимации градиента
-        }),
-        Animated.timing(gradientHeight, {
-          toValue: screenHeight * 0.9,
-          duration: 3000, // Продолжительность анимации в миллисекундах
-          useNativeDriver: true, // Важно для анимации градиента
-        }),
-      ])
-    ).start();
     const focusHandler = navigation.addListener("focus", () => {
-      // When the page is displayed
       getData();
     });
     return focusHandler;
@@ -120,19 +106,14 @@ export default function App({ navigation }) {
     <View style={styles.container}>
       <StatusBar style="auto" />
       {screenWidth <= 500 ? (
-        <Animated.View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            height: gradientHeight,
-            width: "100%",
-          }}
-        >
+        <View style={{ position: "absolute", width: "100%", height: "100%" }}>
           <LinearGradient
+            start={[Math.random(), Math.random()]}
+            end={[Math.random(), Math.random()]}
             colors={[theme.background, theme.additional]}
             style={styles.gradient}
           ></LinearGradient>
-        </Animated.View>
+        </View>
       ) : null}
       {/* <BarIndicator color={defaultTheme.additional} /> */}
       <ActivityIndicator

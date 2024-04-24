@@ -9,6 +9,12 @@ export default (theme) =>
       justifyContent: "center",
     },
 
+    gradientContainer: {
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+    },
+
     gradient: {
       width: "100%",
       height: "100%",
@@ -43,7 +49,7 @@ export default (theme) =>
       position: "absolute",
       bottom: 0,
       width: "100%",
-      color: theme.text2,
+      color: theme.text,
       fontSize: 21,
       fontFamily: "semi",
       textAlign: "center",

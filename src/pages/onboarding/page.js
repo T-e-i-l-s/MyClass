@@ -14,14 +14,30 @@ import styleSheet from "./styles";
 import { LinearGradient } from "expo-linear-gradient";
 
 const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
 
 export default function App({ navigation, route }) {
   const param = route.params;
 
-  const gradientHeight = useRef(
-    new Animated.Value(param.gradientPosition)
-  ).current;
+  const gradient1Opacity = useRef(new Animated.Value(0)).current;
+  const gradient2Opacity = useRef(new Animated.Value(1)).current;
+  const screenOpacity = useRef(new Animated.Value(1)).current;
+
+  const [gradient1Start, setGradient1Start] = useState([
+    Math.random(),
+    Math.random(),
+  ]);
+  const [gradient1End, setGradient1End] = useState([
+    Math.random(),
+    Math.random(),
+  ]);
+  const [gradient2Start, setGradient2Start] = useState([
+    Math.random(),
+    Math.random(),
+  ]);
+  const [gradient2End, setGradient2End] = useState([
+    Math.random(),
+    Math.random(),
+  ]);
 
   const theme =
     route.params.theme == "dark"
@@ -43,21 +59,43 @@ export default function App({ navigation, route }) {
   const scrollToNext = () => {
     if (sliderPosition + 1 == cards.length) {
       // If last card has shown
+      Animated.timing(gradient1Opacity, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(gradient2Opacity, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(screenOpacity, {
+        toValue: 0,
+        duration: 400,
+        useNativeDriver: true,
+      }).start();
       AsyncStorage.setItem(param.data.onboarding.id, "shown");
-      /*
-      There are two Menu screens in this application
-      It's important bacause of the gestures
-      On android we use community library called "react-native-swipe-gestures"
-      On the web we use "react-native-gesture-handler"
-      */
-      navigation.navigate("Menu", param);
-      // if (Platform.OS == "web") {
-      //   navigation.navigate("MenuWeb", param);
-      // } else {
-      //   navigation.navigate("MenuAndroid", param);
-      // }
+      setTimeout(() => {
+        navigation.navigate("Menu", param);
+      }, 500);
     } else {
       // If it wasn't last card
+      setGradient1Start(gradient2Start);
+      setGradient1End(gradient2End);
+      setGradient2Start([Math.random(), Math.random()]);
+      setGradient2End([Math.random(), Math.random()]);
+      gradient1Opacity["_value"] = 1;
+      gradient2Opacity["_value"] = 0;
+      Animated.timing(gradient1Opacity, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+      Animated.timing(gradient2Opacity, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
       flatListRef.current.scrollToIndex({
         animated: true,
         index: sliderPosition + 1,
@@ -65,76 +103,77 @@ export default function App({ navigation, route }) {
     }
   };
 
-  React.useEffect(() => {
-    console.log(param);
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(gradientHeight, {
-          toValue: screenHeight * 0.8,
-          duration: 3000, // Продолжительность анимации в миллисекундах
-          useNativeDriver: true, // Важно для анимации градиента
-        }),
-        Animated.timing(gradientHeight, {
-          toValue: screenHeight * 0.9,
-          duration: 3000, // Продолжительность анимации в миллисекундах
-          useNativeDriver: true, // Важно для анимации градиента
-        }),
-      ])
-    ).start();
-  });
-
   return (
     <View style={styles.container}>
-      {screenWidth <= 500 ? (
-        <Animated.View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            height: gradientHeight,
-            width: "100%",
-          }}
-        >
-          <LinearGradient
-            colors={[theme.background, theme.additional]}
-            style={styles.gradient}
-          ></LinearGradient>
-        </Animated.View>
-      ) : null}
-
-      <StatusBar style={route.params.theme == "dark" ? "light" : "dark"} />
-
-      <View style={{ flexDirection: "row", width: "100%" }}>
-        <FlatList
-          style={{ width: "100%" }}
-          onScroll={(e) => savePosition(e.nativeEvent.contentOffset.x)}
-          horizontal={true}
-          ref={flatListRef}
-          snapToAlignment="center"
-          snapToInterval={Dimensions.get("window").width}
-          data={cards}
-          scrollEnabled={Platform.OS == "web" ? false : true}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                width: screenWidth > 500 ? 500 : screenWidth,
-                alignItems: "center",
-              }}
+      <Animated.View
+        style={{
+          opacity: screenOpacity,
+          width: "100%",
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {screenWidth <= 500 ? (
+          <View style={{ position: "absolute", width: "100%", height: "100%" }}>
+            <Animated.View
+              style={[styles.gradientContainer, { opacity: gradient1Opacity }]}
             >
-              {screenWidth <= 500 ? (
-                <Image style={styles.image} source={{ uri: item.image }} />
-              ) : null}
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.text}>{item.text}</Text>
-            </View>
-          )}
-        />
-      </View>
+              <LinearGradient
+                start={gradient1Start}
+                end={gradient1End}
+                colors={[theme.background, theme.additional]}
+                style={styles.gradient}
+              ></LinearGradient>
+            </Animated.View>
 
-      {/* Button */}
-      <Text onPress={() => scrollToNext()} style={styles.button}>
-        {sliderPosition + 1 == cards.length ? "На главную" : "Далее"}
-      </Text>
+            <Animated.View
+              style={[styles.gradientContainer, { opacity: gradient2Opacity }]}
+            >
+              <LinearGradient
+                start={gradient2Start}
+                end={gradient2End}
+                colors={[theme.background, theme.additional]}
+                style={styles.gradient}
+              ></LinearGradient>
+            </Animated.View>
+          </View>
+        ) : null}
+
+        <StatusBar style={route.params.theme == "dark" ? "light" : "dark"} />
+
+        <View style={{ flexDirection: "row", width: "100%" }}>
+          <FlatList
+            style={{ width: "100%" }}
+            onScroll={(e) => savePosition(e.nativeEvent.contentOffset.x)}
+            horizontal={true}
+            ref={flatListRef}
+            snapToAlignment="center"
+            snapToInterval={Dimensions.get("window").width}
+            data={cards}
+            scrollEnabled={Platform.OS == "web" ? false : true}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  width: screenWidth > 500 ? 500 : screenWidth,
+                  alignItems: "center",
+                }}
+              >
+                {screenWidth <= 500 ? (
+                  <Image style={styles.image} source={{ uri: item.image }} />
+                ) : null}
+                <Text style={styles.title}>{item.title}</Text>
+              </View>
+            )}
+          />
+        </View>
+
+        {/* Button */}
+        <Text onPress={() => scrollToNext()} style={styles.button}>
+          {sliderPosition + 1 == cards.length ? "На главную" : "Далее"}
+        </Text>
+      </Animated.View>
     </View>
   );
 }
