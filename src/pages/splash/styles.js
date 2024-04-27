@@ -23,11 +23,11 @@ export default (theme) =>
     indicator: {
       width: 50,
       height: 50,
-      color: theme.text2,
+      color: theme.text,
     },
 
     atributeText: {
-      color: theme.text2,
+      color: theme.text,
       fontFamily: "semi",
       fontSize: 18,
       marginTop: 10,

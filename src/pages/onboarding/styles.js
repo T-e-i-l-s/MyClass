@@ -31,8 +31,7 @@ export default (theme) =>
       color: theme.text,
       textAlign: "center",
       fontSize: 22,
-      fontFamily: "semi",
-      fontWeight: "600",
+      fontFamily: "regular",
       marginTop: 10,
     },
 

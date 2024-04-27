@@ -17,15 +17,15 @@ import { LinearGradient } from "expo-linear-gradient";
 
 // AsyncStorage.clear();
 const screenWidth = Dimensions.get("window").width;
-const screenHeight = Dimensions.get("window").height;
+
+const gradientStart = [Math.random(), Math.random()];
+const gradientEnd = [Math.random(), Math.random()];
 
 export default function App({ navigation }) {
   const defaultTheme = require("../../../themes/dark.json");
   const [styles, setStyles] = useState(styleSheet(defaultTheme));
   const [theme, setTheme] = useState(defaultTheme);
-
-  const gradient1Opacity = useRef(new Animated.Value(0)).current;
-  const gradient2Opacity = useRef(new Animated.Value(1)).current;
+  const [themeName, setThemeName] = useState(defaultTheme);
 
   const getData = async () => {
     // Updating color theme
@@ -33,6 +33,9 @@ export default function App({ navigation }) {
     if (!currentThemeName) {
       currentThemeName = "dark";
     }
+
+    setThemeName(currentThemeName);
+
     if (currentThemeName == "light") {
       setTheme(require("../../../themes/light.json"));
       setStyles(styleSheet(require("../../../themes/light.json")));
@@ -68,6 +71,8 @@ export default function App({ navigation }) {
         data: data,
         theme: currentThemeName,
         username: username,
+        gradientStart: gradientStart,
+        gradientEnd: gradientEnd,
       });
     } else if (
       (data.onboarding["isRevealed"] && onbooardingStatus != "shown") ||
@@ -78,6 +83,8 @@ export default function App({ navigation }) {
         data: data,
         theme: currentThemeName,
         username: username,
+        gradientStart: gradientStart,
+        gradientEnd: gradientEnd,
       });
     } else {
       /*
@@ -106,10 +113,17 @@ export default function App({ navigation }) {
     <View style={styles.container}>
       <StatusBar style="auto" />
       {screenWidth <= 500 ? (
-        <View style={{ position: "absolute", width: "100%", height: "100%" }}>
+        <View
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            opacity: themeName == "dark" ? 1 : 0.6,
+          }}
+        >
           <LinearGradient
-            start={[Math.random(), Math.random()]}
-            end={[Math.random(), Math.random()]}
+            start={gradientStart}
+            end={gradientEnd}
             colors={[theme.background, theme.additional]}
             style={styles.gradient}
           ></LinearGradient>

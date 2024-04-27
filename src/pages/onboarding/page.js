@@ -19,28 +19,18 @@ export default function App({ navigation, route }) {
   const param = route.params;
 
   const gradient1Opacity = useRef(new Animated.Value(0)).current;
-  const gradient2Opacity = useRef(new Animated.Value(1)).current;
+  const gradient2Opacity = useRef(
+    new Animated.Value(param.theme == "dark" ? 1 : 0.6)
+  ).current;
   const screenOpacity = useRef(new Animated.Value(1)).current;
 
-  const [gradient1Start, setGradient1Start] = useState([
-    Math.random(),
-    Math.random(),
-  ]);
-  const [gradient1End, setGradient1End] = useState([
-    Math.random(),
-    Math.random(),
-  ]);
-  const [gradient2Start, setGradient2Start] = useState([
-    Math.random(),
-    Math.random(),
-  ]);
-  const [gradient2End, setGradient2End] = useState([
-    Math.random(),
-    Math.random(),
-  ]);
+  const [gradient1Start, setGradient1Start] = useState(param.gradientStart);
+  const [gradient1End, setGradient1End] = useState(param.gradientEnd);
+  const [gradient2Start, setGradient2Start] = useState(param.gradientStart);
+  const [gradient2End, setGradient2End] = useState(param.gradientEnd);
 
   const theme =
-    route.params.theme == "dark"
+    param.theme == "dark"
       ? require("../../../themes/dark.json")
       : require("../../../themes/light.json");
   const styles = styleSheet(theme);
@@ -84,7 +74,7 @@ export default function App({ navigation, route }) {
       setGradient1End(gradient2End);
       setGradient2Start([Math.random(), Math.random()]);
       setGradient2End([Math.random(), Math.random()]);
-      gradient1Opacity["_value"] = 1;
+      gradient1Opacity["_value"] = param.theme == "dark" ? 1 : 0.6;
       gradient2Opacity["_value"] = 0;
       Animated.timing(gradient1Opacity, {
         toValue: 0,
@@ -92,7 +82,7 @@ export default function App({ navigation, route }) {
         useNativeDriver: true,
       }).start();
       Animated.timing(gradient2Opacity, {
-        toValue: 1,
+        toValue: param.theme == "dark" ? 1 : 0.6,
         duration: 1000,
         useNativeDriver: true,
       }).start();
