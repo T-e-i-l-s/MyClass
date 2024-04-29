@@ -7,12 +7,13 @@ import {
   Image,
 } from "react-native";
 import styleSheet from "./styles";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../keys/firebase.json";
 import push from "../../hooks/firebase/push";
 import Animation from "../../hooks/animations/Animation";
+import logEvent from "../../hooks/analytics/logEvent";
 
 const db = initializeApp(firebaseConfig);
 
@@ -78,6 +79,10 @@ export default function App({ route }) {
     result.schedule[dayName] = timetable;
     push(db, "MyClass", "Timetable", dayName, currentSchedule);
   };
+
+  useEffect(() => {
+    logEvent("schedule screen has openned");
+  });
 
   return (
     <View style={styles.container}>

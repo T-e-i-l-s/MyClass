@@ -2,6 +2,8 @@ import { Text, View, FlatList, ScrollView, Platform } from "react-native";
 import styleSheet from "./styles";
 import GetCurrentWeekday from "../../hooks/handlingDates/GetCurrentWeekday";
 import GetCurrentDate from "../../hooks/handlingDates/GetCurrentDate";
+import { useEffect } from "react";
+import logEvent from "../../hooks/analytics/logEvent";
 
 export default function App({ navigation, route }) {
   const param = route.params;
@@ -30,6 +32,10 @@ export default function App({ navigation, route }) {
       ? require("../../../themes/dark.json")
       : require("../../../themes/light.json");
   const styles = styleSheet(theme);
+
+  useEffect(() => {
+    logEvent("holiday screen has openned");
+  });
 
   const separator = (
     <View
@@ -68,7 +74,8 @@ export default function App({ navigation, route }) {
           <Text style={styles.currentWeekday}>{GetCurrentWeekday()}</Text>
           <Text
             style={styles.currentDate}
-            onPress={() => {
+            onLongPress={() => {
+              logEvent("password screen has opened");
               navigation.navigate("PasswordScreen", param);
             }}
           >

@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import styleSheet from "./styles";
+import logEvent from "../../hooks/analytics/logEvent";
 
 export default function App({ navigation, route }) {
   const param = route.params;
@@ -34,23 +35,12 @@ export default function App({ navigation, route }) {
       let result = param;
       result.data.devMode.active = !result.data.devMode.active;
 
-      /*
-      There are two Menu screens in this application
-      It's important bacause of the gestures
-      On android we use community library called "react-native-swipe-gestures"
-      On the web we use "react-native-gesture-handler"
-      */
+      logEvent("correct password");
 
-      // Navigation to the correct screen
       navigation.navigate("Menu", result);
-      // if (Platform.OS == "web") {
-      //   navigation.navigate("MenuWeb", result);
-      // } else {
-      //   navigation.navigate("MenuAndroid", result);
-      // }
     } else {
       // If password is incorrect
-
+      logEvent("incorrect password");
       setUnderlayColor("red");
       setInputTitle("Неверный пароль");
     }

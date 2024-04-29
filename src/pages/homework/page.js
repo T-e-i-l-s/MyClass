@@ -7,7 +7,7 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { initializeApp } from "firebase/app";
 import { LinearGradient } from "expo-linear-gradient";
@@ -19,6 +19,7 @@ import DateToString from "../../hooks/handlingDates/DateToString";
 import GetCurrentWeekday from "../../hooks/handlingDates/GetCurrentWeekday";
 import GetCurrentDate from "../../hooks/handlingDates/GetCurrentDate";
 import ReportError from "../../views/reportError";
+import logEvent from "../../hooks/analytics/logEvent";
 
 const db = initializeApp(firebaseConfig);
 
@@ -49,6 +50,10 @@ export default function App({ route }) {
     result.homework.tasks = homework;
     push(db, "MyClass", "Homework", "tasks", tasks);
   };
+
+  useEffect(() => {
+    logEvent("homework screen has openned");
+  });
 
   return (
     <View style={styles.container}>

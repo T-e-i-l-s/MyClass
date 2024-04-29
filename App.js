@@ -5,18 +5,15 @@ import * as SplashScreen from "expo-splash-screen";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import dark from "./themes/dark.json";
 import light from "./themes/light.json";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import Holidays from "./src/pages/holidays/page";
-// import { vexo } from "vexo-analytics"; // Analytic platform
-
-// Connecting application with Vexo
-// vexo("04e43c32-9288-4a2a-af12-27eef87ac681");
+import logEvent from "./src/hooks/analytics/logEvent";
 
 // Deployment Splash screen(to solve growth after start)
 SplashScreen.preventAutoHideAsync();
 
 let isReady = false; // Ready status
 const currentThemeName = "dark"; // await AsyncStorage.getItem("theme");
+
+logEvent("application started");
 
 export default function App() {
   // Loading fonts

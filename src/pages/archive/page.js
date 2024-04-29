@@ -12,6 +12,7 @@ import React, { useRef } from "react";
 import styleSheet from "./styles";
 import GetProximity from "../../hooks/handlingDates/GetProximity";
 import Animation from "../../hooks/animations/Animation";
+import logEvent from "../../hooks/analytics/logEvent";
 
 export default function App({ navigation, route }) {
   const theme =
@@ -26,6 +27,7 @@ export default function App({ navigation, route }) {
   const pageOpacity = useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
+    logEvent("archive screen has openned");
     const focusHandler = navigation.addListener("focus", () => {
       Animation(pageOpacity, 1, 500);
     });
@@ -39,6 +41,7 @@ export default function App({ navigation, route }) {
       <Animated.ScrollView
         style={{ flex: 1, width: "100%", opacity: pageOpacity }}
         contentContainerStyle={{ width: "100%", alignItems: "center" }}
+        showsVerticalScrollIndicator={false}
       >
         {/* Arrow */}
         <View style={styles.arrowBar}>

@@ -10,6 +10,9 @@ data({'homework': ..., etc.})
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../keys/firebase.json";
 import get from "../../hooks/firebase/get";
+// import logEvent from "../firebase/logEvent";
+// import { getAnalytics, logEvent } from "firebase/analytics";
+// import analytics from "@react-native-firebase/analytics";
 
 const db = initializeApp(firebaseConfig);
 

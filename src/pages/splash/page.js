@@ -14,12 +14,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import appConfig from "../../../app.json";
 import loadData from "../../hooks/handlingData/LoadData"; // Data loading function
 import { LinearGradient } from "expo-linear-gradient";
+import logEvent from "../../hooks/analytics/logEvent";
 
 // AsyncStorage.clear();
 const screenWidth = Dimensions.get("window").width;
 
 const gradientStart = [Math.random(), Math.random()];
 const gradientEnd = [Math.random(), Math.random()];
+
+logEvent("device OS: " + Platform.OS);
+logEvent("device type: " + (screenWidth > 500 ? "desktop" : "mobile phone"));
+logEvent("app vesion: ", appConfig.expo.version);
 
 export default function App({ navigation }) {
   const defaultTheme = require("../../../themes/dark.json");
@@ -34,6 +39,7 @@ export default function App({ navigation }) {
       currentThemeName = "dark";
     }
 
+    logEvent(currentThemeName + " theme");
     setThemeName(currentThemeName);
 
     if (currentThemeName == "light") {
@@ -54,9 +60,10 @@ export default function App({ navigation }) {
     const onbooardingStatus = await AsyncStorage.getItem(data.onboarding.id);
 
     // Navigating to the correct screen
-    if (data.devMode.currentVersion != appConfig.expo.version && 1 < 1) {
+    if (data.devMode.currentVersion != appConfig.expo.version) {
       // If version is outdated
       // Navigating to onboarding screen with warning "Доступна новая версия"
+      logEvent("version is deprecated");
       data["onboarding"] = {
         cards: [
           {
@@ -74,11 +81,9 @@ export default function App({ navigation }) {
         gradientStart: gradientStart,
         gradientEnd: gradientEnd,
       });
-    } else if (
-      (data.onboarding["isRevealed"] && onbooardingStatus != "shown") ||
-      1 > 0
-    ) {
+    } else if (data.onboarding["isRevealed"] && onbooardingStatus != "shown") {
       // If current onboarding hasn't shown
+      logEvent("onboarding hasn't shown");
       navigation.navigate("Onboarding", {
         data: data,
         theme: currentThemeName,
@@ -87,13 +92,7 @@ export default function App({ navigation }) {
         gradientEnd: gradientEnd,
       });
     } else {
-      /*
-      There are two Menu screens in this application
-      It's important bacause of the gestures
-      On android we use community library called "react-native-swipe-gestures"
-      On the web we use "react-native-gesture-handler"
-      */
-
+      logEvent("onboarding's shown");
       navigation.navigate("Menu", {
         data: data,
         theme: currentThemeName,
@@ -112,7 +111,7 @@ export default function App({ navigation }) {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      {screenWidth <= 500 ? (
+      {screenWidth <= 500 && Platform.OS == "web" ? (
         <View
           style={{
             position: "absolute",

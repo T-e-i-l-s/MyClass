@@ -49,16 +49,6 @@ export default function App({ navigation, route }) {
   const scrollToNext = () => {
     if (sliderPosition + 1 == cards.length) {
       // If last card has shown
-      Animated.timing(gradient1Opacity, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }).start();
-      Animated.timing(gradient2Opacity, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true,
-      }).start();
       Animated.timing(screenOpacity, {
         toValue: 0,
         duration: 400,
@@ -70,22 +60,24 @@ export default function App({ navigation, route }) {
       }, 500);
     } else {
       // If it wasn't last card
-      setGradient1Start(gradient2Start);
-      setGradient1End(gradient2End);
-      setGradient2Start([Math.random(), Math.random()]);
-      setGradient2End([Math.random(), Math.random()]);
-      gradient1Opacity["_value"] = param.theme == "dark" ? 1 : 0.6;
-      gradient2Opacity["_value"] = 0;
-      Animated.timing(gradient1Opacity, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start();
-      Animated.timing(gradient2Opacity, {
-        toValue: param.theme == "dark" ? 1 : 0.6,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start();
+      if (Platform.OS == "web") {
+        setGradient1Start(gradient2Start);
+        setGradient1End(gradient2End);
+        setGradient2Start([Math.random(), Math.random()]);
+        setGradient2End([Math.random(), Math.random()]);
+        gradient1Opacity["_value"] = param.theme == "dark" ? 1 : 0.6;
+        gradient2Opacity["_value"] = 0;
+        Animated.timing(gradient1Opacity, {
+          toValue: 0,
+          duration: 1000,
+          useNativeDriver: true,
+        }).start();
+        Animated.timing(gradient2Opacity, {
+          toValue: param.theme == "dark" ? 1 : 0.6,
+          duration: 1000,
+          useNativeDriver: true,
+        }).start();
+      }
       flatListRef.current.scrollToIndex({
         animated: true,
         index: sliderPosition + 1,
@@ -104,7 +96,7 @@ export default function App({ navigation, route }) {
           alignItems: "center",
         }}
       >
-        {screenWidth <= 500 ? (
+        {screenWidth <= 500 && Platform.OS == "web" ? (
           <View style={{ position: "absolute", width: "100%", height: "100%" }}>
             <Animated.View
               style={[styles.gradientContainer, { opacity: gradient1Opacity }]}
@@ -127,6 +119,21 @@ export default function App({ navigation, route }) {
                 style={styles.gradient}
               ></LinearGradient>
             </Animated.View>
+          </View>
+        ) : Platform.OS == "android" ? (
+          <View style={{ position: "absolute", width: "100%", height: "100%" }}>
+            <LinearGradient
+              start={(0, 0)}
+              end={[1, 1]}
+              colors={[
+                theme.background,
+                param.theme == "dark"
+                  ? theme.additional
+                  : theme.additional + "75",
+                theme.background,
+              ]}
+              style={styles.gradient}
+            ></LinearGradient>
           </View>
         ) : null}
 

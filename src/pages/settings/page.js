@@ -1,8 +1,10 @@
-import { View, ScrollView, Text, Linking } from "react-native";
+import { View, ScrollView, Text, Linking, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
 import styleSheet from "./styles";
 import changeTheme from "../../hooks/handlingData/ChangeTheme";
+import { useEffect } from "react";
+import logEvent from "../../hooks/analytics/logEvent";
+import { Platform } from "react-native";
 
 export default function App({ route }) {
   const param = route.params;
@@ -14,6 +16,24 @@ export default function App({ route }) {
       ? require("../../../themes/dark.json")
       : require("../../../themes/light.json");
   const styles = styleSheet(theme);
+
+  const alert = (title, description, options, extra) => {
+    const result = window.confirm(
+      [title, description].filter(Boolean).join("\n")
+    );
+
+    if (result) {
+      const confirmOption = options.find(({ style }) => style !== "cancel");
+      confirmOption && confirmOption.onPress();
+    } else {
+      const cancelOption = options.find(({ style }) => style === "cancel");
+      cancelOption && cancelOption.onPress();
+    }
+  };
+
+  useEffect(() => {
+    logEvent("settings screen has openned");
+  });
 
   return (
     <View style={styles.container}>
@@ -28,7 +48,7 @@ export default function App({ route }) {
       >
         <Text style={styles.title}>Настройки</Text>
 
-        {param.username == undefined ? (
+        {/* {param.username == undefined ? (
           <LinearGradient
             start={{ x: 0, y: 0.6 }}
             end={{ x: 1, y: 0.8 }}
@@ -55,12 +75,16 @@ export default function App({ route }) {
           >
             <Text style={styles.authTitle}>{param.username}</Text>
           </LinearGradient>
-        )}
+        )} */}
 
         <View
           style={styles.settingBlock}
           onStartShouldSetResponder={() => {
-            changeTheme(navigation, param.theme);
+            Platform.OS == "web" &&
+            Dimensions.get("window").width > 500 &&
+            param.theme == "dark"
+              ? alert("Тебе нет", null, null, null)
+              : changeTheme(navigation, param.theme);
           }}
         >
           <Text style={styles.settingTitle}>Тема</Text>

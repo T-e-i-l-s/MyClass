@@ -1,4 +1,3 @@
-
 /*
 Change theme
 This function switches the theme
@@ -8,18 +7,19 @@ Input:
 2) currentTheme - current theme('dark' or 'light')
 */
 
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import logEvent from "../analytics/logEvent";
 
 export default function (navigation, currentTheme) {
-
-  if (currentTheme == 'dark') {
-    AsyncStorage.setItem('theme', 'light').then(() => {
-      navigation.navigate('Splash')
-    })
+  if (currentTheme == "dark") {
+    logEvent("from dark to light theme");
+    AsyncStorage.setItem("theme", "light").then(() => {
+      navigation.navigate("Splash");
+    });
   } else {
-    AsyncStorage.setItem('theme', 'dark').then(() => {
-      navigation.navigate('Splash')
-    })
+    logEvent("from light to dark theme");
+    AsyncStorage.setItem("theme", "dark").then(() => {
+      navigation.navigate("Splash");
+    });
   }
-
 }
