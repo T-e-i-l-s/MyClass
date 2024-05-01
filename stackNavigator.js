@@ -34,6 +34,7 @@ export default function Navigate() {
             name="Splash"
             component={Splash}
             options={{
+              title: "Загрузка",
               headerShown: false,
               animation: "none",
               headerMode: "float",
@@ -45,6 +46,7 @@ export default function Navigate() {
             name="Onboarding"
             component={Onboarding}
             options={{
+              title: "Добро пожаловать",
               headerShown: false,
               animation: "none",
               headerMode: "float",
@@ -56,6 +58,7 @@ export default function Navigate() {
             name="Menu"
             component={TabNavigator}
             options={{
+              title: "Меню",
               headerShown: false,
               animation: "none",
               headerMode: "float",
@@ -67,6 +70,7 @@ export default function Navigate() {
             name="Login"
             component={Login}
             options={{
+              title: "Вход",
               headerShown: false,
               animation: "none",
               headerMode: "float",
@@ -78,6 +82,7 @@ export default function Navigate() {
             name="Archive"
             component={Archive}
             options={{
+              title: "Архив",
               headerShown: false,
               animation: "none",
               headerMode: "float",
@@ -89,6 +94,7 @@ export default function Navigate() {
             name="CreateHomework"
             component={CreateHomework}
             options={{
+              title: "Добавить задание",
               headerShown: false,
               animation: "none",
               headerMode: "float",
@@ -100,6 +106,7 @@ export default function Navigate() {
             name="CreateLesson"
             component={CreateLesson}
             options={{
+              title: "Добавить урок",
               headerShown: false,
               animation: "none",
               headerMode: "float",
@@ -111,6 +118,7 @@ export default function Navigate() {
             name="PasswordScreen"
             component={PasswordScreen}
             options={{
+              title: "Вход",
               headerShown: false,
               animation: "none",
               headerMode: "float",

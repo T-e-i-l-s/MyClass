@@ -74,7 +74,7 @@ export default function App({ navigation, route }) {
           <Text style={styles.currentWeekday}>{GetCurrentWeekday()}</Text>
           <Text
             style={styles.currentDate}
-            onLongPress={() => {
+            onPress={() => {
               logEvent("password screen has opened");
               navigation.navigate("PasswordScreen", param);
             }}

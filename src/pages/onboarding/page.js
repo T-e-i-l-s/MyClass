@@ -13,7 +13,8 @@ import { StatusBar } from "expo-status-bar";
 import styleSheet from "./styles";
 import { LinearGradient } from "expo-linear-gradient";
 
-const screenWidth = Dimensions.get("window").width;
+const dimensions = Dimensions.get("window");
+console.log(dimensions.width);
 
 export default function App({ navigation, route }) {
   const param = route.params;
@@ -42,7 +43,7 @@ export default function App({ navigation, route }) {
 
   // Count number of current card function
   const savePosition = (x) => {
-    setSliderPosition(Math.round(x / Dimensions.get("window").width));
+    setSliderPosition(Math.round(x / dimensions.width));
   };
 
   // Open next card function
@@ -96,7 +97,7 @@ export default function App({ navigation, route }) {
           alignItems: "center",
         }}
       >
-        {screenWidth <= 500 && Platform.OS == "web" ? (
+        {dimensions.width <= 500 && Platform.OS == "web" ? (
           <View style={{ position: "absolute", width: "100%", height: "100%" }}>
             <Animated.View
               style={[styles.gradientContainer, { opacity: gradient1Opacity }]}
@@ -146,18 +147,18 @@ export default function App({ navigation, route }) {
             horizontal={true}
             ref={flatListRef}
             snapToAlignment="center"
-            snapToInterval={Dimensions.get("window").width}
+            snapToInterval={dimensions.width}
             data={cards}
             scrollEnabled={Platform.OS == "web" ? false : true}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
               <View
                 style={{
-                  width: screenWidth > 500 ? 500 : screenWidth,
+                  width: dimensions.width > 500 ? 500 : dimensions.width,
                   alignItems: "center",
                 }}
               >
-                {screenWidth <= 500 ? (
+                {dimensions.width <= 500 ? (
                   <Image style={styles.image} source={{ uri: item.image }} />
                 ) : null}
                 <Text style={styles.title}>{item.title}</Text>

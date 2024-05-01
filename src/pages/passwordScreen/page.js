@@ -1,11 +1,4 @@
-import {
-  Text,
-  View,
-  TextInput,
-  TouchableHighlight,
-  Image,
-  Platform,
-} from "react-native";
+import { Text, View, TextInput, TouchableHighlight, Image } from "react-native";
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import styleSheet from "./styles";

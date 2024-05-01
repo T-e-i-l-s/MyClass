@@ -81,7 +81,11 @@ export default function App({ navigation }) {
         gradientStart: gradientStart,
         gradientEnd: gradientEnd,
       });
-    } else if (data.onboarding["isRevealed"] && onbooardingStatus != "shown") {
+    } else if (
+      data.onboarding["isRevealed"] &&
+      onbooardingStatus != "shown" &&
+      screenWidth < 500
+    ) {
       // If current onboarding hasn't shown
       logEvent("onboarding hasn't shown");
       navigation.navigate("Onboarding", {
